@@ -1,0 +1,1297 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+
+    min-height:100vh;
+
+    font-family:'Inter', sans-serif;
+
+    color:white;
+
+    background:black;
+
+    overflow-x:hidden;
+
+}
+
+
+
+
+
+/* BACKGROUND VIDEO */
+
+.background-video {
+
+    position:fixed;
+
+    inset:0;
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+    z-index:-2;
+
+}
+
+
+
+.video-overlay {
+
+    position:fixed;
+
+    inset:0;
+
+    background:
+
+    linear-gradient(
+
+        rgba(0,0,0,0.55),
+
+        rgba(0,0,0,0.85)
+
+    );
+
+    z-index:-1;
+
+}
+
+
+
+
+
+/* MAIN CONTAINER */
+
+
+.container {
+
+    min-height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:40px 20px;
+
+}
+
+
+
+
+
+/* COMMON CARDS */
+
+
+.screen {
+
+    width:90%;
+
+    max-width:650px;
+
+
+    padding:45px;
+
+
+    background:
+
+    rgba(255,255,255,0.12);
+
+
+    backdrop-filter:blur(18px);
+
+
+    border:
+
+    1px solid rgba(255,255,255,0.25);
+
+
+    border-radius:20px;
+
+
+    box-shadow:
+
+    0 30px 80px rgba(0,0,0,0.6);
+
+
+    animation:fadeIn 1s ease;
+
+}
+
+
+
+
+
+.brand {
+
+    font-size:13px;
+
+    letter-spacing:5px;
+
+    opacity:.8;
+
+    margin-bottom:25px;
+
+}
+
+
+
+
+
+h1 {
+
+    font-family:'Playfair Display',serif;
+
+    font-size:42px;
+
+    margin-bottom:25px;
+
+}
+
+
+
+.subtitle {
+
+    font-size:20px;
+
+    line-height:1.6;
+
+}
+
+
+
+
+
+.route {
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:25px;
+
+    font-size:26px;
+
+    margin:35px 0;
+
+}
+
+
+
+
+
+.question {
+
+    margin-bottom:25px;
+
+    font-size:18px;
+
+}
+
+
+
+
+
+
+
+/* BUTTONS */
+
+
+.buttons {
+
+    display:flex;
+
+    gap:20px;
+
+}
+
+
+
+button {
+
+    padding:15px 35px;
+
+    border-radius:50px;
+
+    border:none;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    font-size:15px;
+
+}
+
+
+
+button:hover {
+
+    transform:translateY(-3px);
+
+}
+
+
+
+.yes-btn {
+
+    background:white;
+
+    color:black;
+
+}
+
+
+
+.no-btn {
+
+    background:transparent;
+
+    color:white;
+
+    border:1px solid white;
+
+}
+
+
+
+
+
+/* VERIFICATION */
+
+
+.progress-container {
+
+    width:100%;
+
+    height:8px;
+
+    background:rgba(255,255,255,.3);
+
+    margin:30px 0;
+
+    border-radius:20px;
+
+}
+
+
+
+.progress-bar {
+
+    width:0%;
+
+    height:100%;
+
+    background:white;
+
+    border-radius:20px;
+
+}
+
+
+
+.percentage {
+
+    text-align:center;
+
+    font-size:25px;
+
+}
+
+
+
+
+
+.checks {
+
+    margin-top:30px;
+
+}
+
+
+
+.checks p {
+
+    display:flex;
+
+    justify-content:space-between;
+
+    padding:15px 0;
+
+    border-bottom:1px solid rgba(255,255,255,.2);
+
+}
+
+
+
+
+
+.approved {
+
+    text-align:center;
+
+    margin-top:30px;
+
+    letter-spacing:3px;
+
+}
+
+
+
+
+
+
+
+/* AGREEMENT */
+
+
+.terms {
+
+    margin-top:25px;
+
+}
+
+
+
+.terms p {
+
+    margin:18px 0;
+
+    line-height:1.6;
+
+}
+
+
+
+.agreement-footer {
+
+    margin-top:30px;
+
+    padding-top:20px;
+
+    border-top:1px solid rgba(255,255,255,.3);
+
+}
+
+
+
+
+
+.accept-btn {
+
+    margin-top:30px;
+
+    width:100%;
+
+    background:white;
+
+    color:black;
+
+}
+
+
+
+
+
+
+
+
+/* BOARDING PASS */
+
+
+.boarding-card {
+
+    background:#f5f1e8;
+
+    color:#111;
+
+}
+
+
+
+
+
+.boarding-card .brand {
+
+    color:#555;
+
+}
+
+
+
+.ticket-loading {
+
+    text-align:center;
+
+}
+
+
+
+.ticket-loading p {
+
+    letter-spacing:5px;
+
+}
+
+
+
+
+
+.scanner {
+
+    width:250px;
+
+    height:3px;
+
+    background:#111;
+
+    margin:30px auto;
+
+    overflow:hidden;
+
+    position:relative;
+
+}
+
+
+
+.scanner::after {
+
+    content:"";
+
+    position:absolute;
+
+    width:80px;
+
+    height:100%;
+
+    background:white;
+
+    left:-80px;
+
+    animation:scan 1.5s infinite;
+
+}
+
+
+
+
+
+.ticket-content {
+
+    animation:ticketSlide 1s ease;
+
+}
+
+
+
+
+
+.ticket {
+
+    margin-top:30px;
+
+}
+
+
+
+.ticket div {
+
+    padding:18px 0;
+
+    border-bottom:1px dashed #999;
+
+}
+
+
+
+.ticket strong {
+
+    display:block;
+
+    margin-top:6px;
+
+    font-size:18px;
+
+}
+
+
+
+
+.stamp {
+
+    display:inline-block;
+
+    margin-top:30px;
+
+    padding:12px 25px;
+
+    border:3px solid #111;
+
+    letter-spacing:4px;
+
+    transform:rotate(-8deg);
+
+    animation:stamp .6s ease;
+
+}
+
+
+
+
+
+.barcode {
+
+    margin-top:30px;
+
+    font-family:monospace;
+
+    letter-spacing:5px;
+
+}
+
+
+
+.final-message {
+
+    margin-top:25px;
+
+    text-align:center;
+
+}
+
+
+
+
+
+
+
+/* UTILITY */
+
+
+.hidden {
+
+    display:none;
+
+}
+
+
+
+
+
+.fade-out {
+
+    animation:fadeOut .8s forwards;
+
+}
+
+
+
+
+
+@keyframes scan {
+
+    from {
+
+        left:-80px;
+
+    }
+
+    to {
+
+        left:250px;
+
+    }
+
+}
+
+
+
+
+@keyframes ticketSlide {
+
+    from {
+
+        opacity:0;
+
+        transform:translateY(80px);
+
+    }
+
+    to {
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+
+
+@keyframes stamp {
+
+    from {
+
+        opacity:0;
+
+        transform:scale(3) rotate(-20deg);
+
+    }
+
+    to {
+
+        opacity:1;
+
+        transform:scale(1) rotate(-8deg);
+
+    }
+
+}
+
+
+
+
+
+@keyframes fadeIn {
+
+    from {
+
+        opacity:0;
+
+        transform:translateY(30px);
+
+    }
+
+    to {
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+
+
+
+@keyframes fadeOut {
+
+    from {
+
+        opacity:1;
+
+    }
+
+    to {
+
+        opacity:0;
+
+    }
+
+}
+
+
+
+
+
+
+
+@media(max-width:600px){
+
+
+h1 {
+
+font-size:32px;
+
+}
+
+
+.screen {
+
+padding:30px;
+
+}
+
+
+.buttons {
+
+flex-direction:column;
+
+}
+
+
+
+.route {
+
+font-size:20px;
+
+}
+
+
+}
+
+.journey-card{
+    margin:35px 0;
+    padding:20px;
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:16px;
+    background:rgba(255,255,255,.05);
+}
+
+.journey-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px 0;
+}
+
+.journey-item:not(:last-child){
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.journey-title{
+    font-size:12px;
+    letter-spacing:2px;
+    opacity:.7;
+    text-transform:uppercase;
+}
+
+.journey-text{
+    font-weight:500;
+}
+
+/* LOGIN */
+
+.login-card {
+    max-width: 560px;
+}
+
+.login-subtitle {
+    line-height: 1.6;
+    opacity: .9;
+    margin-bottom: 28px;
+}
+
+.login-form {
+    display: grid;
+    gap: 18px;
+}
+
+.login-form label {
+    display: grid;
+    gap: 8px;
+    font-size: 14px;
+    letter-spacing: .5px;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,.25);
+    background: rgba(255,255,255,.10);
+    color: white;
+    outline: none;
+    font-size: 15px;
+}
+
+.login-form input::placeholder {
+    color: rgba(255,255,255,.55);
+}
+
+.login-form input:focus {
+    border-color: white;
+    background: rgba(255,255,255,.15);
+}
+
+.login-btn {
+    margin-top: 8px;
+    width: 100%;
+    background: white;
+    color: black;
+}
+
+#loginMessage {
+    min-height: 24px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.login-success {
+    color: #8ff0b4;
+}
+
+.login-error {
+    color: #ff9a9a;
+}
+
+
+/* THREE-WHEEL SCROLL LOCK */
+
+.security-section {
+    display: grid;
+    gap: 14px;
+}
+
+.security-label {
+    font-size: 14px;
+    letter-spacing: .5px;
+}
+
+.security-hint {
+    margin: 0;
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.12);
+    line-height: 1.55;
+    text-align: center;
+    color: rgba(255,255,255,.88);
+}
+
+.security-hint strong {
+    color: white;
+    letter-spacing: 1px;
+}
+
+.scroll-lock {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+    margin-top: 4px;
+}
+
+.lock-wheel {
+    width: 92px;
+    display: grid;
+    gap: 8px;
+}
+
+.lock-arrow {
+    width: 100%;
+    padding: 4px 0;
+    background: transparent;
+    color: white;
+    border: none;
+    opacity: .72;
+    font-size: 16px;
+}
+
+.lock-arrow:hover {
+    transform: none;
+    opacity: 1;
+}
+
+.lock-window {
+    display: grid;
+    place-items: center;
+    gap: 4px;
+    min-height: 128px;
+    padding: 10px;
+    border-radius: 16px;
+    background:
+        linear-gradient(180deg, rgba(255,255,255,.13), rgba(255,255,255,.04));
+    border: 1px solid rgba(255,255,255,.22);
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.12),
+        inset 0 -18px 28px rgba(0,0,0,.22),
+        0 12px 28px rgba(0,0,0,.28);
+    user-select: none;
+}
+
+.lock-window span {
+    color: rgba(255,255,255,.42);
+    font-size: 16px;
+}
+
+.lock-current {
+    width: 100%;
+    padding: 8px 0;
+    text-align: center;
+    font-size: 38px;
+    line-height: 1;
+    border-top: 1px solid rgba(255,255,255,.25);
+    border-bottom: 1px solid rgba(255,255,255,.25);
+}
+
+.selected-code {
+    text-align: center;
+    letter-spacing: 14px;
+    padding-left: 14px;
+    font-weight: 600;
+    opacity: .88;
+}
+
+@media(max-width:600px) {
+    .scroll-lock {
+        gap: 10px;
+    }
+
+    .lock-wheel {
+        width: 76px;
+    }
+
+    .lock-window {
+        min-height: 116px;
+    }
+
+    .lock-current {
+        font-size: 32px;
+    }
+}
+
+
+/* FINAL TRAVEL PORTAL */
+
+.boarding-card {
+    max-width: 720px;
+}
+
+.travel-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin: 4px 0 34px;
+    padding: 6px;
+    border-radius: 16px;
+    background: #e7e2d8;
+}
+
+.travel-tab {
+    width: 100%;
+    padding: 12px 10px;
+    border-radius: 11px;
+    background: transparent;
+    color: #555;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.travel-tab:hover {
+    transform: none;
+    background: rgba(255,255,255,.55);
+}
+
+.travel-tab.active {
+    background: #111;
+    color: #fff;
+    box-shadow: 0 8px 18px rgba(0,0,0,.18);
+}
+
+.travel-panel {
+    display: none;
+    animation: portalPanelIn .45s ease;
+}
+
+.travel-panel.active {
+    display: block;
+}
+
+.portal-intro {
+    margin: -8px 0 28px;
+    color: #555;
+    line-height: 1.65;
+}
+
+/* ITINERARY */
+
+.itinerary-list {
+    display: grid;
+    gap: 14px;
+}
+
+.itinerary-item {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 18px;
+    padding: 18px;
+    border: 1px solid #d5cec0;
+    border-radius: 15px;
+    background: rgba(255,255,255,.55);
+}
+
+.itinerary-day {
+    align-self: start;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #777;
+}
+
+.itinerary-item strong {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 17px;
+}
+
+.itinerary-item p {
+    color: #555;
+    line-height: 1.55;
+}
+
+/* COMPANION PROFILE */
+
+.companion-profile {
+    display: grid;
+    gap: 18px;
+}
+
+.companion-avatar {
+    width: 84px;
+    height: 84px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #111;
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    letter-spacing: 2px;
+}
+
+.profile-heading,
+.profile-section {
+    padding: 18px 0;
+    border-bottom: 1px dashed #aaa;
+}
+
+.profile-heading span {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #777;
+}
+
+.profile-heading strong {
+    font-size: 20px;
+}
+
+.profile-section h2 {
+    margin-bottom: 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #666;
+}
+
+.profile-section p {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.profile-list {
+    display: grid;
+    gap: 10px;
+    list-style: none;
+    font-size: 17px;
+    font-weight: 500;
+}
+
+.travel-rating {
+    letter-spacing: 7px;
+    font-size: 27px !important;
+}
+
+@keyframes portalPanelIn {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media(max-width:600px) {
+    .travel-tabs {
+        grid-template-columns: 1fr;
+    }
+
+    .itinerary-item {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+}
+
+
+/* LATEST UI ADJUSTMENTS */
+
+/* Keep login content compact enough to show the validation message */
+.login-card {
+    padding: 30px 38px;
+}
+
+.login-card .brand {
+    margin-bottom: 14px;
+}
+
+.login-card h1 {
+    margin-bottom: 14px;
+}
+
+.login-subtitle {
+    margin-bottom: 18px;
+}
+
+.login-form {
+    gap: 12px;
+}
+
+.login-form label {
+    gap: 6px;
+}
+
+.login-form input {
+    padding: 12px 15px;
+}
+
+.security-section {
+    gap: 9px;
+}
+
+.security-hint {
+    padding: 10px 14px;
+    line-height: 1.4;
+}
+
+.scroll-lock {
+    margin-top: 0;
+    gap: 14px;
+}
+
+.lock-wheel {
+    gap: 4px;
+}
+
+.lock-window {
+    min-height: 108px;
+    padding: 7px;
+}
+
+.lock-current {
+    font-size: 34px;
+    padding: 6px 0;
+}
+
+.lock-arrow {
+    padding: 1px 0;
+}
+
+.selected-code {
+    margin-top: -2px;
+}
+
+.login-btn {
+    margin-top: 2px;
+    padding-top: 13px;
+    padding-bottom: 13px;
+}
+
+#loginMessage {
+    min-height: 20px;
+    margin-top: -3px;
+}
+
+/* Companion profile image */
+.companion-avatar {
+    width: 112px;
+    height: 112px;
+    display: block;
+    overflow: hidden;
+    border-radius: 50%;
+    background: transparent;
+    border: 4px solid rgba(255,255,255,.9);
+    box-shadow: 0 12px 30px rgba(0,0,0,.2);
+}
+
+.companion-avatar img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* Green approvals */
+.approved {
+    color: #2e9b57;
+}
+
+.approved-status {
+    color: #238548;
+}
+
+.stamp {
+    color: #238548;
+    border-color: #238548;
+}
+
+@media(max-width:600px) {
+    .container {
+        padding: 16px 12px;
+        align-items: flex-start;
+    }
+
+    .login-card {
+        width: 100%;
+        padding: 22px 20px;
+    }
+
+    .login-card .brand {
+        margin-bottom: 10px;
+    }
+
+    .login-card h1 {
+        margin-bottom: 10px;
+    }
+
+    .login-subtitle {
+        margin-bottom: 14px;
+    }
+
+    .login-form {
+        gap: 9px;
+    }
+
+    .security-section {
+        gap: 7px;
+    }
+
+    .security-hint {
+        padding: 8px 10px;
+    }
+
+    .scroll-lock {
+        gap: 8px;
+    }
+
+    .lock-wheel {
+        width: 72px;
+    }
+
+    .lock-window {
+        min-height: 96px;
+    }
+
+    .lock-current {
+        font-size: 30px;
+    }
+}

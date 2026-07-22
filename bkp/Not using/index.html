@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Punjabi Bagh Airways ✈️</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<video class="background-video" autoplay muted loop playsinline>
+    <source src="assets/plane-takeoff.mp4" type="video/mp4">
+</video>
+
+<div class="video-overlay"></div>
+
+<main class="container">
+
+<section class="screen invitation-card">
+    <p class="brand">PUNJABI BAGH AIRWAYS</p>
+
+    <h1>
+        One Trip.<br>
+        Two Countries.<br>
+        Countless Stories.
+    </h1>
+
+    <p class="subtitle">
+        An office trip.<br>
+        A travel plan.<br>
+        One unforgettable itinerary.
+    </p>
+
+    <div class="route">
+        <span>🇮🇳 India</span>
+        <span class="arrow">→</span>
+        <span>🇬🇧 London</span>
+        <span class="arrow">→</span>
+        <span>🇯🇵 Japan</span>
+    </div>
+
+    <div class="journey-card">
+        <div class="journey-item">
+            <span class="journey-title">Phase 01</span>
+            <span class="journey-text">Case Studies & Meetings 🇬🇧</span>
+        </div>
+        <div class="journey-item">
+            <span class="journey-title">Phase 02</span>
+            <span class="journey-text">Sushi, Shrines & Side Quests 🇯🇵</span>
+        </div>
+    </div>
+
+    <p class="question">
+        Passenger <strong>Tanya Arora</strong>,
+        <br><br>
+        Would you like to accept this itinerary?
+    </p>
+
+    <div class="buttons">
+        <button class="yes-btn">Accept Boarding ✈️</button>
+        <button class="no-btn" id="noButton">Maybe Later</button>
+    </div>
+
+    <p id="funnyMessage"></p>
+</section>
+
+<!-- Keep your existing verification, agreement and boarding pass sections below this
+     or replace them with the latest versions we've built. -->
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
