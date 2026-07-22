@@ -51,9 +51,46 @@ Punjabi Bagh Airways ✈️
 <div class="video-overlay"></div>
 
 
+<!-- BACKGROUND MUSIC -->
+<audio id="backgroundMusic" loop preload="metadata">
+    <source src="assets/music/coldplay.mp3" type="audio/mpeg">
+    Your browser does not support background audio.
+</audio>
 
+<div class="music-player" id="musicPlayer" aria-label="Background music controls">
+    <div class="music-player-shine" aria-hidden="true"></div>
 
+    <button type="button"
+            class="music-icon-button"
+            id="musicPlayButton"
+            aria-label="Play background music"
+            title="Play background music">
+        <span class="music-icon" id="musicPlayIcon" aria-hidden="true"></span>
+    </button>
 
+    <div class="music-details">
+        <span class="music-title">Adventure of a Lifetime</span>
+        <span class="music-status" id="musicStatus" aria-live="polite">Music paused</span>
+    </div>
+
+    <button type="button"
+            class="music-icon-button"
+            id="musicMuteButton"
+            aria-label="Mute background music"
+            title="Mute background music">
+        <span class="music-icon" id="musicMuteIcon" aria-hidden="true"></span>
+    </button>
+
+    <label class="volume-control" for="musicVolume">
+        <span class="sr-only">Background music volume</span>
+        <input type="range"
+               id="musicVolume"
+               min="0"
+               max="100"
+               value="25"
+               aria-label="Background music volume">
+    </label>
+</div>
 
 <main class="container">
 
@@ -683,16 +720,18 @@ Confirm Travel Clearance ✈️
                     <h2>Travel Style</h2>
 
                     <ul class="profile-list">
-                        <li>✓ Hates planning</li>
-                        <li>✓ Harry Potter Fan</li>
-                        <li>✓ Often watches ROM-COM</li>
-                        <li>✓ Coffee Addict</li>
+                        <li>✓ Anime Lover 🎌</li>
+                        <li>✓ Harry Potter Fan ⚡</li>
+                        <li>✓ Rom-Com Connoisseur 🎬</li>
+                        <li>✓ Patience Level: Legendary 🧘</li>
+                        <li>✓ Happy to Trade the Window Seat ✈️</li>
+                        <li>✓ Goes With the Flow 🌍</li>
                     </ul>
                 </div>
 
                 <div class="profile-section">
                     <h2>Emergency Skill</h2>
-                    <p>Can always find food 😄</p>
+                    <p>Professional luggage guardian. 🧳😄</p>
                 </div>
 
                 <div class="profile-section">

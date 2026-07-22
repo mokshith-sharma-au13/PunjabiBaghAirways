@@ -512,3 +512,139 @@ if (hintTrigger && securityHint) {
         }
     });
 }
+
+// BACKGROUND MUSIC CONTROLS
+const backgroundMusic = document.getElementById("backgroundMusic");
+const musicPlayButton = document.getElementById("musicPlayButton");
+const musicMuteButton = document.getElementById("musicMuteButton");
+const musicVolume = document.getElementById("musicVolume");
+const musicStatus = document.getElementById("musicStatus");
+const musicPlayer = document.getElementById("musicPlayer");
+const musicPlayIcon = document.getElementById("musicPlayIcon");
+const musicMuteIcon = document.getElementById("musicMuteIcon");
+
+const musicIcons = {
+    play: `
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M8.6 5.9a1 1 0 0 1 1.54-.84l8.1 5.25a1 1 0 0 1 0 1.68l-8.1 5.25A1 1 0 0 1 8.6 16.4V5.9Z"/>
+        </svg>`,
+    pause: `
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="6.75" y="5" width="3.5" height="14" rx="1.2"/>
+            <rect x="13.75" y="5" width="3.5" height="14" rx="1.2"/>
+        </svg>`,
+    volume: `
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4.5 9.25v5.5h3.4l4.35 3.5V5.75l-4.35 3.5H4.5Z"/>
+            <path class="sound-wave" d="M15.2 8.25a5.25 5.25 0 0 1 0 7.5"/>
+            <path class="sound-wave" d="M17.7 5.75a8.75 8.75 0 0 1 0 12.5"/>
+        </svg>`,
+    mute: `
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4.5 9.25v5.5h3.4l4.35 3.5V5.75l-4.35 3.5H4.5Z"/>
+            <path class="sound-wave" d="m16.1 9.1 4.2 4.2m0-4.2-4.2 4.2"/>
+        </svg>`
+};
+
+function setMusicIcon(element, iconName) {
+    if (element) {
+        element.innerHTML = musicIcons[iconName];
+    }
+}
+
+function updateMusicControls() {
+    if (
+        !backgroundMusic ||
+        !musicPlayButton ||
+        !musicMuteButton ||
+        !musicStatus ||
+        !musicPlayer
+    ) return;
+
+    const isPlaying = !backgroundMusic.paused;
+    const isMuted = backgroundMusic.muted || backgroundMusic.volume === 0;
+
+    setMusicIcon(musicPlayIcon, isPlaying ? "pause" : "play");
+    setMusicIcon(musicMuteIcon, isMuted ? "mute" : "volume");
+
+    musicPlayButton.setAttribute(
+        "aria-label",
+        isPlaying ? "Pause background music" : "Play background music"
+    );
+    musicPlayButton.title =
+        isPlaying ? "Pause background music" : "Play background music";
+
+    musicMuteButton.setAttribute(
+        "aria-label",
+        isMuted ? "Unmute background music" : "Mute background music"
+    );
+    musicMuteButton.title =
+        isMuted ? "Unmute background music" : "Mute background music";
+
+    musicPlayer.classList.toggle("is-playing", isPlaying && !isMuted);
+    musicPlayer.classList.toggle("is-muted", isMuted);
+
+    if (!isPlaying) {
+        musicStatus.textContent = "Music paused";
+    } else if (isMuted) {
+        musicStatus.textContent = "Music muted";
+    } else {
+        musicStatus.textContent =
+            `Playing • ${Math.round(backgroundMusic.volume * 100)}%`;
+    }
+}
+
+async function toggleBackgroundMusic() {
+    if (!backgroundMusic) return;
+
+    if (backgroundMusic.paused) {
+        try {
+            await backgroundMusic.play();
+        } catch (error) {
+            musicStatus.textContent = "Tap play to start music";
+        }
+    } else {
+        backgroundMusic.pause();
+    }
+
+    updateMusicControls();
+}
+
+if (
+    backgroundMusic &&
+    musicPlayButton &&
+    musicMuteButton &&
+    musicVolume &&
+    musicStatus
+) {
+    backgroundMusic.volume = Number(musicVolume.value) / 100;
+
+    musicPlayButton.addEventListener("click", toggleBackgroundMusic);
+
+    musicMuteButton.addEventListener("click", () => {
+        backgroundMusic.muted = !backgroundMusic.muted;
+        updateMusicControls();
+    });
+
+    musicVolume.addEventListener("input", () => {
+        const selectedVolume = Number(musicVolume.value) / 100;
+        backgroundMusic.volume = selectedVolume;
+
+        if (selectedVolume > 0 && backgroundMusic.muted) {
+            backgroundMusic.muted = false;
+        }
+
+        updateMusicControls();
+    });
+
+    backgroundMusic.addEventListener("play", updateMusicControls);
+    backgroundMusic.addEventListener("pause", updateMusicControls);
+    backgroundMusic.addEventListener("volumechange", updateMusicControls);
+    backgroundMusic.addEventListener("error", () => {
+        musicStatus.textContent = "Music file unavailable";
+        musicPlayer.classList.remove("is-playing");
+    });
+
+    updateMusicControls();
+}
+
