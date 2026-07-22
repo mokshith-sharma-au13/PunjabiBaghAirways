@@ -91,11 +91,25 @@ Punjabi Bagh Airways ✈️
         <div class="security-section">
             <span class="security-label">Security Code</span>
 
-            <p class="security-hint">
-                <strong>Hint:</strong><br>
-                Think of someone who always<br>
-                gets excited to see you. 🐶
-            </p>
+            <div class="hint-wrapper">
+                <button
+                    type="button"
+                    class="hint-trigger"
+                    id="hintTrigger"
+                    aria-expanded="false"
+                    aria-controls="securityHint">
+                    💡 Hint
+                </button>
+
+                <div
+                    class="security-hint"
+                    id="securityHint"
+                    role="tooltip"
+                    aria-hidden="true">
+                    Think of someone who always<br>
+                    gets excited to see you. 🐶
+                </div>
+            </div>
 
             <div class="scroll-lock" aria-label="Three letter security lock">
 
@@ -420,7 +434,7 @@ Travel Companion Agreement
 
 <p>
 
-03 — You accept that Google Maps may occasionally be questioned. 🗺️
+03 — You agree that this journey shall not serve as unofficial therapy, and that my character shall not be professionally analyzed or judged during the trip. 🧠😂
 
 </p>
 
@@ -524,6 +538,10 @@ Confirm Travel Clearance ✈️
 
             <button type="button" class="travel-tab" data-tab="companion-panel">
                 Companion Profile
+            </button>
+
+            <button type="button" class="travel-tab" data-tab="terms-panel">
+                Terms &amp; Conditions
             </button>
         </nav>
 
@@ -684,6 +702,62 @@ Confirm Travel Clearance ✈️
                     </p>
                 </div>
 
+            </div>
+
+        </div>
+
+        <!-- TERMS & CONDITIONS REFERENCE -->
+        <div class="travel-panel" id="terms-panel">
+
+            <p class="portal-document-label">OFFICIAL DOCUMENT • REFERENCE COPY</p>
+
+            <h1>TERMS &amp; CONDITIONS</h1>
+
+            <p class="portal-intro">
+                Travel Companion Agreement — available here for future reference
+                after travel clearance has been confirmed.
+            </p>
+
+            <div class="portal-terms">
+
+                <p>
+                    <span>01</span>
+                    You accept unlimited walking because the best places are never near the station. 🚶
+                </p>
+
+                <p>
+                    <span>02</span>
+                    You acknowledge that getting lost is not a mistake; it is an unplanned sightseeing opportunity. 🗺️😂
+                </p>
+
+                <p>
+                    <span>03</span>
+                    You agree that this journey shall not serve as unofficial therapy, and that my character shall not be professionally analyzed or judged during the trip. 🧠😂
+                </p>
+
+                <p>
+                    <span>04</span>
+                    You acknowledge that my patience level is high enough to survive “just one more photo.” 📸😂
+                </p>
+
+                <p>
+                    <span>05</span>
+                    You promise not to judge my terrible jokes. 😂
+                </p>
+
+                <p>
+                    <span>06</span>
+                    You agree not to drag me into unnecessary daredevil activities... but don't worry, I’ll still be there as the official safety department. 😄
+                </p>
+
+            </div>
+
+            <div class="portal-terms-footer">
+                <strong>Travel Clearance Confirmed</strong>
+                <p>
+                    No cancellations, no refunds — just office missions, new places,
+                    funny moments, and stories to tell later. 😄✈️🌸
+                </p>
             </div>
 
         </div>

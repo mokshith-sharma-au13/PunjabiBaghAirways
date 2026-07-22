@@ -478,3 +478,37 @@ travelTabs.forEach(tab => {
         }
     });
 });
+
+
+// SECURITY HINT: hover on desktop, tap/click on mobile
+const hintTrigger = document.getElementById("hintTrigger");
+const securityHint = document.getElementById("securityHint");
+
+function setHintVisibility(isVisible) {
+    if (!hintTrigger || !securityHint) return;
+
+    hintTrigger.setAttribute("aria-expanded", String(isVisible));
+    securityHint.setAttribute("aria-hidden", String(!isVisible));
+    securityHint.classList.toggle("is-visible", isVisible);
+}
+
+if (hintTrigger && securityHint) {
+    hintTrigger.addEventListener("click", event => {
+        event.stopPropagation();
+        const isOpen = hintTrigger.getAttribute("aria-expanded") === "true";
+        setHintVisibility(!isOpen);
+    });
+
+    hintTrigger.addEventListener("keydown", event => {
+        if (event.key === "Escape") {
+            setHintVisibility(false);
+            hintTrigger.blur();
+        }
+    });
+
+    document.addEventListener("click", event => {
+        if (!event.target.closest(".hint-wrapper")) {
+            setHintVisibility(false);
+        }
+    });
+}
