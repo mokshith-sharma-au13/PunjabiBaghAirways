@@ -505,7 +505,7 @@ button:hover {
 
 
 
-.ticket div {
+.ticket > div {
 
     padding:18px 0;
 
@@ -1816,6 +1816,58 @@ font-size:20px;
     .music-player-shine {
         animation: none !important;
         transition: none !important;
+    }
+}
+
+/* BOARDING PASS HEADING WITH PASSENGER PHOTO */
+
+.boarding-pass-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 25px;
+}
+
+.boarding-pass-heading h1 {
+    margin-bottom: 0;
+}
+
+.boarding-pass-avatar {
+    position: relative;
+    width: 112px;
+    height: 112px;
+    flex: 0 0 112px;
+    overflow: hidden;
+    border: 4px solid rgba(255,255,255,.96);
+    border-radius: 50%;
+    background: #ded8cc;
+    box-shadow: 0 12px 30px rgba(0,0,0,.20);
+}
+
+.boarding-pass-avatar img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    display: block;
+    object-fit: cover;
+    object-position: 50% 38%;
+    transform: scale(1.34);
+    transform-origin: center;
+}
+
+@media(max-width:600px) {
+    .boarding-pass-heading {
+        gap: 16px;
+        margin-bottom: 20px;
+    }
+
+    .boarding-pass-avatar {
+        width: 96px;
+        height: 96px;
+        flex-basis: 96px;
     }
 }
 
