@@ -577,6 +577,10 @@ Confirm Travel Clearance ✈️
                 Companion Profile
             </button>
 
+            <button type="button" class="travel-tab" data-tab="side-quests-panel">
+                Side Quests
+            </button>
+
             <button type="button" class="travel-tab" data-tab="terms-panel">
                 Terms &amp; Conditions
             </button>
@@ -752,6 +756,90 @@ Confirm Travel Clearance ✈️
 
         </div>
 
+        <!-- SIDE QUESTS -->
+        <div class="travel-panel" id="side-quests-panel">
+
+            <p class="portal-document-label">LIVE GOOGLE PLACES DISCOVERY</p>
+
+            <h1>SIDE QUEST GENERATOR</h1>
+
+            <p class="portal-intro">
+                Choose a destination and let Punjabi Bagh Airways assign your next adventure.
+                Every result is fetched live from Google Places.
+            </p>
+
+            <div class="side-quest-generator">
+
+                <fieldset class="destination-selector">
+                    <legend>Choose destination</legend>
+
+                    <label class="destination-option">
+                        <input type="radio" name="sideQuestDestination" value="london" checked>
+                        <span>
+                            <strong>London</strong>
+                            <small>🇬🇧 Landmarks, cafés and hidden corners</small>
+                        </span>
+                    </label>
+
+                    <label class="destination-option">
+                        <input type="radio" name="sideQuestDestination" value="japan">
+                        <span>
+                            <strong>Japan</strong>
+                            <small>🇯🇵 Anime, temples, views and side quests</small>
+                        </span>
+                    </label>
+                </fieldset>
+
+                <button type="button" class="generate-place-btn" id="generatePlaceButton">
+                    Generate Adventure 🎲
+                </button>
+
+                <p class="place-generator-status" id="placeGeneratorStatus" aria-live="polite">
+                    Select a destination and generate your first side quest.
+                </p>
+
+                <article class="generated-place-card hidden" id="generatedPlaceCard">
+                    <div class="generated-place-image-wrap">
+                        <img id="generatedPlaceImage" src="" alt="">
+                        <span class="generated-place-badge" id="generatedPlaceDestination">SIDE QUEST</span>
+                    </div>
+
+                    <div class="generated-place-content">
+                        <div class="generated-place-heading">
+                            <div>
+                                <span class="generated-place-label">YOUR RANDOM ADVENTURE</span>
+                                <h2 id="generatedPlaceName"></h2>
+                            </div>
+                            <div class="generated-place-rating" id="generatedPlaceRating" aria-label="Google rating"></div>
+                        </div>
+
+                        <p class="generated-place-address" id="generatedPlaceAddress"></p>
+                        <p class="generated-place-description" id="generatedPlaceDescription"></p>
+
+                        <div class="generated-place-actions">
+                            <a id="generatedPlaceMapsLink" class="maps-link" href="#" target="_blank" rel="noopener noreferrer">
+                                Open in Google Maps ↗
+                            </a>
+                            <button type="button" class="generate-again-btn" id="generateAnotherPlaceButton">
+                                Generate Another 🎲
+                            </button>
+                        </div>
+
+                        <div class="google-place-attribution" id="googlePlaceAttribution">
+                            Place data provided by Google.
+                        </div>
+                    </div>
+                </article>
+
+                <div class="places-setup-note" id="placesSetupNote">
+                    <strong>One-time setup required:</strong>
+                    Replace <code>YOUR_GOOGLE_MAPS_API_KEY</code> in <code>index.html</code>
+                    with your restricted Google Maps API key.
+                </div>
+
+            </div>
+        </div>
+
         <!-- TERMS & CONDITIONS REFERENCE -->
         <div class="travel-panel" id="terms-panel">
 
@@ -826,6 +914,22 @@ Confirm Travel Clearance ✈️
 
 
 
+
+<!-- GOOGLE MAPS JAVASCRIPT API
+     This browser key should remain restricted to the authorised GitHub Pages website and required APIs. -->
+<script>
+(g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",
+q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),
+r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{
+await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)
+e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);
+e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;
+d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=
+m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));
+d[l]?console.warn(p+" only loads once. Ignoring:",g):
+d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})
+({key:"AIzaSyAImnjYqTfK5qYrgq4DmStgGJlXKIq97Sw",v:"weekly"});
+</script>
 
 <script src="script.js"></script>
 

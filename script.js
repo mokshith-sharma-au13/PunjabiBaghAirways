@@ -648,3 +648,178 @@ if (
     updateMusicControls();
 }
 
+
+
+// SIDE QUEST — LIVE GOOGLE PLACES GENERATOR
+const generatePlaceButton = document.getElementById("generatePlaceButton");
+const generateAnotherPlaceButton = document.getElementById("generateAnotherPlaceButton");
+const placeGeneratorStatus = document.getElementById("placeGeneratorStatus");
+const generatedPlaceCard = document.getElementById("generatedPlaceCard");
+const generatedPlaceImage = document.getElementById("generatedPlaceImage");
+const generatedPlaceDestination = document.getElementById("generatedPlaceDestination");
+const generatedPlaceName = document.getElementById("generatedPlaceName");
+const generatedPlaceRating = document.getElementById("generatedPlaceRating");
+const generatedPlaceAddress = document.getElementById("generatedPlaceAddress");
+const generatedPlaceDescription = document.getElementById("generatedPlaceDescription");
+const generatedPlaceMapsLink = document.getElementById("generatedPlaceMapsLink");
+const googlePlaceAttribution = document.getElementById("googlePlaceAttribution");
+const placesSetupNote = document.getElementById("placesSetupNote");
+
+const sideQuestSearches = {
+    london: [
+        "fun tourist attractions in London UK",
+        "hidden gems to visit in London UK",
+        "unique museums and experiences in London UK",
+        "beautiful viewpoints and gardens in London UK",
+        "Harry Potter attractions in London UK",
+        "interesting markets and neighbourhoods in London UK"
+    ],
+    japan: [
+        "fun tourist attractions in Tokyo Japan",
+        "anime attractions in Tokyo Japan",
+        "unique places to visit in Tokyo Japan",
+        "beautiful temples and gardens in Tokyo Japan",
+        "interesting neighbourhoods in Tokyo Japan",
+        "scenic viewpoints and experiences in Tokyo Japan"
+    ]
+};
+
+const destinationLabels = {
+    london: "LONDON SIDE QUEST 🇬🇧",
+    japan: "JAPAN SIDE QUEST 🇯🇵"
+};
+
+let lastGeneratedPlaceId = "";
+let placesLibraryPromise = null;
+
+function selectedSideQuestDestination() {
+    return document.querySelector('input[name="sideQuestDestination"]:checked')?.value || "london";
+}
+
+function randomItem(items) {
+    return items[Math.floor(Math.random() * items.length)];
+}
+
+function setPlaceGeneratorLoading(isLoading) {
+    if (!generatePlaceButton) return;
+    generatePlaceButton.disabled = isLoading;
+    generatePlaceButton.textContent = isLoading ? "Searching Google Places..." : "Generate Adventure 🎲";
+    if (generateAnotherPlaceButton) generateAnotherPlaceButton.disabled = isLoading;
+}
+
+async function getPlacesLibrary() {
+    if (!window.google?.maps?.importLibrary) {
+        throw new Error("Google Maps is not configured. Add your API key in index.html.");
+    }
+    if (!placesLibraryPromise) placesLibraryPromise = google.maps.importLibrary("places");
+    return placesLibraryPromise;
+}
+
+function createAttributionNode(photo) {
+    const wrapper = document.createElement("span");
+    const attributions = photo?.authorAttributions || [];
+    wrapper.append("Place data from Google Maps");
+    if (attributions.length) {
+        wrapper.append(" · Photo: ");
+        attributions.forEach((attribution, index) => {
+            if (index > 0) wrapper.append(", ");
+            if (attribution.uri) {
+                const link = document.createElement("a");
+                link.href = attribution.uri;
+                link.target = "_blank";
+                link.rel = "noopener noreferrer";
+                link.textContent = attribution.displayName || "Contributor";
+                wrapper.append(link);
+            } else {
+                wrapper.append(attribution.displayName || "Google Maps contributor");
+            }
+        });
+    }
+    return wrapper;
+}
+
+function renderGeneratedPlace(place, destination) {
+    const photo = place.photos?.[0];
+    const photoUrl = photo ? photo.getURI({ maxWidth: 1200, maxHeight: 800 }) : "";
+
+    generatedPlaceName.textContent = place.displayName || "Mystery Adventure";
+    generatedPlaceAddress.textContent = place.formattedAddress || "Address available on Google Maps.";
+    generatedPlaceDestination.textContent = destinationLabels[destination];
+
+    if (Number.isFinite(place.rating)) {
+        const count = Number.isFinite(place.userRatingCount) ? ` · ${place.userRatingCount.toLocaleString()} reviews` : "";
+        generatedPlaceRating.textContent = `★ ${place.rating.toFixed(1)}${count}`;
+        generatedPlaceRating.hidden = false;
+    } else {
+        generatedPlaceRating.hidden = true;
+    }
+
+    const typeName = place.primaryTypeDisplayName || "travel destination";
+    generatedPlaceDescription.textContent =
+        `Punjabi Bagh Airways has selected this ${typeName.toLowerCase()} as your next spontaneous adventure. ` +
+        `Explore it, take too many photos, and pretend the detour was always part of the itinerary.`;
+
+    if (photoUrl) {
+        generatedPlaceImage.src = photoUrl;
+        generatedPlaceImage.alt = `${place.displayName || "Generated destination"} from Google Places`;
+        generatedPlaceImage.hidden = false;
+    } else {
+        generatedPlaceImage.removeAttribute("src");
+        generatedPlaceImage.alt = "";
+        generatedPlaceImage.hidden = true;
+    }
+
+    generatedPlaceMapsLink.href = place.googleMapsURI ||
+        `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.displayName || place.formattedAddress || "")}`;
+
+    googlePlaceAttribution.replaceChildren(createAttributionNode(photo));
+    generatedPlaceCard.classList.remove("hidden");
+    placesSetupNote?.classList.add("is-configured");
+    generatedPlaceCard.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+async function generateRandomGooglePlace() {
+    if (!generatePlaceButton || !placeGeneratorStatus || !generatedPlaceCard) return;
+
+    const destination = selectedSideQuestDestination();
+    const query = randomItem(sideQuestSearches[destination]);
+
+    setPlaceGeneratorLoading(true);
+    placeGeneratorStatus.textContent = `Searching Google for a fun ${destination === "london" ? "London" : "Japan"} side quest...`;
+
+    try {
+        const { Place } = await getPlacesLibrary();
+        const { places } = await Place.searchByText({
+            textQuery: query,
+            fields: ["id", "displayName", "formattedAddress", "rating", "userRatingCount", "photos", "googleMapsURI", "primaryTypeDisplayName"],
+            maxResultCount: 12,
+            minRating: 4,
+            language: "en",
+            region: destination === "london" ? "gb" : "jp"
+        });
+
+        const usablePlaces = places.filter(place => place.displayName && place.photos?.length && place.id !== lastGeneratedPlaceId);
+        const fallbackPlaces = places.filter(place => place.displayName && place.photos?.length);
+        const selectedPlace = randomItem(usablePlaces.length ? usablePlaces : fallbackPlaces);
+
+        if (!selectedPlace) throw new Error("Google did not return a place with an available photo.");
+
+        lastGeneratedPlaceId = selectedPlace.id || "";
+        renderGeneratedPlace(selectedPlace, destination);
+        placeGeneratorStatus.textContent = "Side quest assigned. Not following it is technically allowed... but discouraged. 😄";
+    } catch (error) {
+        console.error("Side quest generator error:", error);
+        generatedPlaceCard.classList.add("hidden");
+        const message = String(error?.message || "");
+        if (message.includes("API key") || message.includes("not configured") || message.includes("could not load")) {
+            placeGeneratorStatus.textContent = "Google Places is not configured yet. Add your restricted API key in index.html.";
+        } else {
+            placeGeneratorStatus.textContent = "The travel generator could not find a place right now. Please try again.";
+        }
+    } finally {
+        setPlaceGeneratorLoading(false);
+    }
+}
+
+generatePlaceButton?.addEventListener("click", generateRandomGooglePlace);
+generateAnotherPlaceButton?.addEventListener("click", generateRandomGooglePlace);
