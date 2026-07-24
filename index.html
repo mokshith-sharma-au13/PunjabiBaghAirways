@@ -29,7 +29,7 @@ Punjabi Bagh Airways ✈️
 
 
 
-<body>
+<body class="cinematic-intro-active">
 
 
 
@@ -49,6 +49,40 @@ Punjabi Bagh Airways ✈️
 
 
 <div class="video-overlay"></div>
+
+<!-- LIGHTWEIGHT CINEMATIC INTRO -->
+<section class="cinematic-opening"
+         id="cinematicOpening"
+         aria-label="Punjabi Bagh Airways cinematic introduction">
+
+    <div class="cinematic-opening-shade" aria-hidden="true"></div>
+
+    <div class="cinematic-takeoff" id="cinematicTakeoff" aria-hidden="true">
+        <span>PREPARING FOR TAKEOFF</span>
+        <div class="cinematic-flight-path">
+            <i></i>
+            <b>✈</b>
+        </div>
+
+        <p class="cinematic-status"
+           id="cinematicStatus"
+           aria-live="polite">
+            Preparing aircraft...
+        </p>
+    </div>
+
+    <div class="cinematic-logo-glass" id="cinematicLogoGlass">
+        <img src="assets/images/Logo.png"
+             class="cinematic-logo-image"
+             alt="Punjabi Bagh Airways">
+    </div>
+
+    <button type="button"
+            class="cinematic-skip"
+            id="cinematicSkip">
+        Skip intro
+    </button>
+</section>
 
 
 <!-- BACKGROUND MUSIC -->
@@ -103,7 +137,7 @@ Punjabi Bagh Airways ✈️
      LOGIN SCREEN
 ========================= -->
 
-<section class="screen login-card">
+<section class="screen login-card cinematic-login-card">
 
     <p class="brand">PUNJABI BAGH AIRWAYS</p>
 
@@ -597,6 +631,49 @@ Confirm Travel Clearance ✈️
                          alt="Tanya Arora">
                 </div>
             </div>
+
+            <section class="trip-countdown"
+                     id="tripCountdown"
+                     aria-label="Trip departure countdown">
+
+                <div class="countdown-heading">
+                    <div>
+                        <span class="countdown-eyebrow">NEXT DEPARTURE</span>
+                        <strong>India → London → Japan</strong>
+                    </div>
+
+                    <span class="countdown-status" id="countdownStatus">
+                        BOARDING SOON
+                    </span>
+                </div>
+
+                <div class="countdown-grid" aria-live="polite">
+                    <div>
+                        <strong id="countdownDays">000</strong>
+                        <span>Days</span>
+                    </div>
+
+                    <div>
+                        <strong id="countdownHours">00</strong>
+                        <span>Hours</span>
+                    </div>
+
+                    <div>
+                        <strong id="countdownMinutes">00</strong>
+                        <span>Minutes</span>
+                    </div>
+
+                    <div>
+                        <strong id="countdownSeconds">00</strong>
+                        <span>Seconds</span>
+                    </div>
+                </div>
+
+                <p class="countdown-note" id="countdownNote">
+                    Estimated departure: 09 November 2026, 9:00 AM IST
+                </p>
+
+            </section>
 
             <div class="ticket">
 

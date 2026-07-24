@@ -1916,3 +1916,541 @@ font-size:20px;
 @keyframes generatedPlaceIn { from { opacity:0; transform:translateY(18px) scale(.985); } to { opacity:1; transform:translateY(0) scale(1); } }
 @media(max-width:760px) { .travel-tabs { grid-template-columns:repeat(2,minmax(0,1fr)); } .travel-tab:last-child { grid-column:1/-1; } }
 @media(max-width:600px) { .destination-selector { grid-template-columns:1fr; } .generated-place-image-wrap { height:220px; } .generated-place-heading { display:grid; } .generated-place-rating { justify-self:start; } .generated-place-actions { align-items:stretch; flex-direction:column; } .maps-link,.generate-again-btn { width:100%; } }
+
+/* =========================================================
+   FLUID CINEMATIC INTRO
+   Kept lightweight for smooth GitHub Pages performance.
+========================================================= */
+
+body.cinematic-intro-active {
+    overflow: hidden;
+}
+
+.cinematic-opening {
+    position: fixed;
+    inset: 0;
+    z-index: 2500;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    opacity: 1;
+    visibility: visible;
+    background: transparent;
+    transition:
+        opacity .8s ease,
+        visibility .8s ease;
+    contain: layout paint;
+}
+
+.cinematic-opening.is-closing {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.cinematic-opening-shade {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 50% 44%,
+            rgba(255,255,255,.025),
+            transparent 34%),
+        linear-gradient(
+            180deg,
+            rgba(3,10,20,.16),
+            rgba(3,10,20,.53)
+        );
+    pointer-events: none;
+}
+
+.cinematic-takeoff {
+    position: absolute;
+    left: 50%;
+    bottom: 13%;
+    width: min(460px, 72vw);
+    color: rgba(255,255,255,.78);
+    text-align: center;
+    transform: translateX(-50%);
+    opacity: 0;
+    animation: cinematicTakeoffShow 8.85s ease .35s forwards;
+    will-change: opacity, transform;
+}
+
+.cinematic-takeoff > span {
+    display: block;
+    margin-bottom: 15px;
+    font-size: clamp(11px, 1.1vw, 14px);
+    font-weight: 600;
+    letter-spacing: 5px;
+}
+
+.cinematic-flight-path {
+    position: relative;
+    height: 24px;
+}
+
+.cinematic-flight-path i {
+    position: absolute;
+    top: 11px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    overflow: hidden;
+    background: rgba(255,255,255,.22);
+}
+
+.cinematic-flight-path i::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,.95),
+        transparent
+    );
+    transform: translateX(-100%);
+    animation: cinematicLineMove 7.4s linear .35s forwards;
+}
+
+.cinematic-flight-path b {
+    position: absolute;
+    top: -2px;
+    left: -18px;
+    color: rgba(255,255,255,.93);
+    font-size: 22px;
+    font-weight: 400;
+    text-shadow: 0 0 12px rgba(255,255,255,.30);
+    animation: cinematicPlaneMove 7.4s linear .35s forwards;
+}
+
+.cinematic-logo-glass {
+    position: relative;
+    width: min(690px, 88vw);
+    padding: 20px 25px;
+    border: 1px solid rgba(255,255,255,.20);
+    border-radius: 28px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.10),
+            rgba(255,255,255,.025)
+        );
+    box-shadow:
+        0 28px 75px rgba(0,0,0,.32),
+        inset 0 1px 0 rgba(255,255,255,.18);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    opacity: 0;
+    transform: translateY(18px) scale(.96);
+    will-change: opacity, transform;
+}
+
+.cinematic-opening.logo-is-visible .cinematic-logo-glass {
+    animation: cinematicLogoShow 1.05s cubic-bezier(.16,1,.3,1) forwards;
+}
+
+.cinematic-logo-glass::before {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    border-radius: 27px;
+    background:
+        radial-gradient(circle at 50% 0%,
+            rgba(255,255,255,.14),
+            transparent 42%);
+    pointer-events: none;
+}
+
+.cinematic-logo-image {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-height: 58vh;
+    display: block;
+    object-fit: contain;
+
+    /*
+       Logo.jpg uses a dark background because JPG cannot be transparent.
+       Screen blending visually removes the dark area so the video remains visible.
+    */
+    mix-blend-mode: screen;
+    filter:
+        contrast(1.07)
+        brightness(1.02);
+    opacity: .96;
+}
+
+.cinematic-skip {
+    position: absolute;
+    right: 22px;
+    bottom: 18px;
+    padding: 8px 14px;
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 999px;
+    background: rgba(8,16,27,.26);
+    color: rgba(255,255,255,.65);
+    font-size: 11px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    opacity: 0;
+    animation: cinematicSkipShow .5s ease 1s forwards;
+}
+
+.cinematic-skip:hover {
+    transform: none;
+    color: #fff;
+    background: rgba(8,16,27,.44);
+}
+
+/* Login is only revealed after the intro. Its existing colors are untouched. */
+.cinematic-login-card {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(22px) scale(.985);
+}
+
+body.cinematic-intro-complete .cinematic-login-card {
+    visibility: visible;
+    animation: cinematicLoginShow .8s cubic-bezier(.16,1,.3,1) forwards;
+}
+
+body.cinematic-intro-active .music-player {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+body.cinematic-intro-complete .music-player {
+    animation: cinematicMusicShow .55s ease .35s both;
+}
+
+@keyframes cinematicTakeoffShow {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, 8px);
+    }
+    8%, 88% {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -7px);
+    }
+}
+
+@keyframes cinematicLineMove {
+    to {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes cinematicPlaneMove {
+    0% {
+        left: -18px;
+        opacity: 0;
+    }
+    4% {
+        opacity: 1;
+    }
+    96% {
+        left: calc(100% - 5px);
+        opacity: 1;
+    }
+    100% {
+        left: calc(100% - 5px);
+        opacity: 1;
+    }
+}
+
+@keyframes cinematicLogoShow {
+    from {
+        opacity: 0;
+        transform: translateY(18px) scale(.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes cinematicLoginShow {
+    from {
+        opacity: 0;
+        transform: translateY(22px) scale(.985);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes cinematicMusicShow {
+    from {
+        opacity: 0;
+        visibility: visible;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+}
+
+@keyframes cinematicSkipShow {
+    to {
+        opacity: 1;
+    }
+}
+
+@media(max-width:600px) {
+    .cinematic-logo-glass {
+        width: 92vw;
+        padding: 13px 14px;
+        border-radius: 20px;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+    }
+
+    .cinematic-logo-glass::before {
+        border-radius: 19px;
+    }
+
+    .cinematic-logo-image {
+        max-height: 52vh;
+    }
+
+    .cinematic-takeoff {
+        bottom: 16%;
+        width: 76vw;
+    }
+
+    .cinematic-takeoff > span {
+        font-size: 8px;
+        letter-spacing: 3.5px;
+    }
+
+    .cinematic-skip {
+        right: 12px;
+        bottom: 12px;
+    }
+}
+
+@media(prefers-reduced-motion: reduce) {
+    .cinematic-takeoff,
+    .cinematic-flight-path i::after,
+    .cinematic-flight-path b,
+    .cinematic-logo-glass,
+    .cinematic-login-card,
+    .music-player {
+        animation-duration: .01ms !important;
+        animation-delay: 0ms !important;
+    }
+}
+
+/* CINEMATIC AMBIENT STATUS */
+
+.cinematic-status {
+    min-height: 28px;
+    margin: 16px 0 0;
+    color: rgba(255,255,255,.88);
+    font-size: clamp(15px, 1.45vw, 18px);
+    font-weight: 500;
+    line-height: 1.5;
+    letter-spacing: 1.7px;
+    text-align: center;
+    text-shadow: 0 2px 12px rgba(0,0,0,.48);
+    transition:
+        opacity .5s ease,
+        transform .5s ease,
+        filter .5s ease;
+}
+
+.cinematic-status.is-changing {
+    opacity: 0;
+    transform: translateY(7px);
+    filter: blur(3px);
+}
+
+
+/* LIVE TRIP COUNTDOWN */
+
+.trip-countdown {
+    position: relative;
+    overflow: hidden;
+    margin: 0 0 28px;
+    padding: 20px;
+    border: 1px solid rgba(17,17,17,.12);
+    border-radius: 18px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.82),
+            rgba(255,255,255,.46)
+        );
+    box-shadow:
+        0 16px 34px rgba(0,0,0,.08),
+        inset 0 1px 0 rgba(255,255,255,.86);
+}
+
+.trip-countdown::before {
+    content: "";
+    position: absolute;
+    top: -70px;
+    right: -55px;
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    background: rgba(35,133,72,.10);
+    filter: blur(3px);
+    pointer-events: none;
+}
+
+.countdown-heading {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 17px;
+}
+
+.countdown-eyebrow {
+    display: block;
+    margin-bottom: 6px;
+    color: #777;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.countdown-heading strong {
+    font-family: 'Playfair Display', serif;
+    font-size: 19px;
+}
+
+.countdown-status {
+    flex: 0 0 auto;
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: rgba(35,133,72,.11);
+    color: #238548;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+}
+
+.countdown-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 9px;
+}
+
+.countdown-grid > div {
+    min-width: 0;
+    display: grid;
+    gap: 5px;
+    padding: 13px 8px;
+    border: 1px solid rgba(17,17,17,.09);
+    border-radius: 13px;
+    background: rgba(255,255,255,.62);
+    text-align: center;
+}
+
+.countdown-grid strong {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 4vw, 32px);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+
+.countdown-grid span {
+    color: #6d6d6d;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.countdown-note {
+    position: relative;
+    z-index: 1;
+    margin-top: 14px;
+    color: #666;
+    font-size: 11px;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.trip-countdown.is-departing {
+    border-color: rgba(35,133,72,.34);
+    background:
+        linear-gradient(
+            135deg,
+            rgba(35,133,72,.13),
+            rgba(255,255,255,.62)
+        );
+}
+
+@media(max-width:600px) {
+    .countdown-heading {
+        display: grid;
+    }
+
+    .countdown-status {
+        justify-self: start;
+    }
+
+    .countdown-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .trip-countdown {
+        padding: 16px;
+    }
+}
+
+
+
+@media(max-width:600px) {
+    .cinematic-status {
+        min-height: 24px;
+        margin-top: 14px;
+        padding: 0 12px;
+        font-size: 14px;
+        letter-spacing: 1.25px;
+    }
+}
+
+
+/* FOUR-STAGE TAKEOFF SYNCHRONISATION */
+
+.cinematic-flight-path::after {
+    content: "";
+    position: absolute;
+    top: 8px;
+    left: 0;
+    width: 100%;
+    height: 7px;
+    background:
+        radial-gradient(circle at 0% 50%, rgba(255,255,255,.9) 0 2px, transparent 2.5px),
+        radial-gradient(circle at 33.333% 50%, rgba(255,255,255,.78) 0 2px, transparent 2.5px),
+        radial-gradient(circle at 66.666% 50%, rgba(255,255,255,.78) 0 2px, transparent 2.5px),
+        radial-gradient(circle at 100% 50%, rgba(255,255,255,.95) 0 2px, transparent 2.5px);
+    pointer-events: none;
+    opacity: .72;
+}
+
+.cinematic-opening.logo-is-visible .cinematic-takeoff {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-8px);
+    transition:
+        opacity .6s ease,
+        transform .6s ease;
+    pointer-events: none;
+}

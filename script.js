@@ -1,3 +1,180 @@
+// FLUID CINEMATIC INTRO
+
+const cinematicOpening = document.getElementById("cinematicOpening");
+const cinematicSkip = document.getElementById("cinematicSkip");
+
+let cinematicLogoTimer;
+let cinematicFinishTimer;
+let cinematicCleanupTimer;
+let cinematicSequenceFinished = false;
+
+function completeCinematicSequence() {
+    if (cinematicSequenceFinished) return;
+    cinematicSequenceFinished = true;
+
+    clearTimeout(cinematicLogoTimer);
+    clearTimeout(cinematicFinishTimer);
+    clearTimeout(cinematicCleanupTimer);
+
+    cinematicOpening?.classList.add("is-closing");
+
+    document.body.classList.remove("cinematic-intro-active");
+    document.body.classList.add("cinematic-intro-complete");
+
+    cinematicCleanupTimer = window.setTimeout(() => {
+        if (cinematicOpening) {
+            cinematicOpening.hidden = true;
+        }
+    }, 850);
+}
+
+function beginCinematicSequence() {
+    if (!cinematicOpening) {
+        document.body.classList.remove("cinematic-intro-active");
+        document.body.classList.add("cinematic-intro-complete");
+        return;
+    }
+
+    // Allow the background video to establish the scene.
+    cinematicLogoTimer = window.setTimeout(() => {
+        cinematicOpening.classList.add("logo-is-visible");
+    }, 9200);
+
+    // Show the logo briefly, then reveal the existing login panel.
+    cinematicFinishTimer = window.setTimeout(
+        completeCinematicSequence,
+        13300
+    );
+}
+
+cinematicSkip?.addEventListener(
+    "click",
+    completeCinematicSequence,
+    { once: true }
+);
+
+window.addEventListener(
+    "load",
+    beginCinematicSequence,
+    { once: true }
+);
+
+
+// CINEMATIC AMBIENT STATUS
+
+const cinematicStatus = document.getElementById("cinematicStatus");
+
+const cinematicStatusMessages = [
+    "Preparing aircraft...",
+    "Checking passenger manifest...",
+    "Loading questionable travel decisions...",
+    "Ready for boarding."
+];
+
+let cinematicStatusTimer = null;
+let cinematicStatusIndex = 0;
+
+function startCinematicStatusMessages() {
+    if (!cinematicStatus) return;
+
+    cinematicStatusIndex = 0;
+    cinematicStatus.textContent =
+        cinematicStatusMessages[cinematicStatusIndex];
+
+    cinematicStatusTimer = window.setInterval(() => {
+        if (
+            cinematicStatusIndex >=
+            cinematicStatusMessages.length - 1
+        ) {
+            clearInterval(cinematicStatusTimer);
+            return;
+        }
+
+        cinematicStatus.classList.add("is-changing");
+
+        window.setTimeout(() => {
+            cinematicStatusIndex += 1;
+
+            cinematicStatus.textContent =
+                cinematicStatusMessages[cinematicStatusIndex];
+
+            cinematicStatus.classList.remove("is-changing");
+        }, 500);
+    }, 2300);
+}
+
+window.addEventListener(
+    "load",
+    startCinematicStatusMessages,
+    { once: true }
+);
+
+cinematicSkip?.addEventListener("click", () => {
+    clearInterval(cinematicStatusTimer);
+});
+
+
+// TRIP COUNTDOWN
+// Change this one value later if the confirmed departure date changes.
+const tripDepartureTime =
+    new Date("2026-11-09T09:00:00+05:30").getTime();
+
+const countdownDays = document.getElementById("countdownDays");
+const countdownHours = document.getElementById("countdownHours");
+const countdownMinutes = document.getElementById("countdownMinutes");
+const countdownSeconds = document.getElementById("countdownSeconds");
+const countdownStatus = document.getElementById("countdownStatus");
+const countdownNote = document.getElementById("countdownNote");
+const tripCountdown = document.getElementById("tripCountdown");
+
+function padCountdownValue(value, length = 2) {
+    return String(value).padStart(length, "0");
+}
+
+function updateTripCountdown() {
+    if (
+        !countdownDays ||
+        !countdownHours ||
+        !countdownMinutes ||
+        !countdownSeconds
+    ) return;
+
+    const remaining = tripDepartureTime - Date.now();
+
+    if (remaining <= 0) {
+        countdownDays.textContent = "000";
+        countdownHours.textContent = "00";
+        countdownMinutes.textContent = "00";
+        countdownSeconds.textContent = "00";
+
+        if (countdownStatus) {
+            countdownStatus.textContent = "NOW BOARDING";
+        }
+
+        if (countdownNote) {
+            countdownNote.textContent =
+                "The adventure is officially ready for takeoff. ✈️";
+        }
+
+        tripCountdown?.classList.add("is-departing");
+        return;
+    }
+
+    const totalSeconds = Math.floor(remaining / 1000);
+    const days = Math.floor(totalSeconds / 86400);
+    const hours = Math.floor((totalSeconds % 86400) / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    countdownDays.textContent = padCountdownValue(days, 3);
+    countdownHours.textContent = padCountdownValue(hours);
+    countdownMinutes.textContent = padCountdownValue(minutes);
+    countdownSeconds.textContent = padCountdownValue(seconds);
+}
+
+updateTripCountdown();
+window.setInterval(updateTripCountdown, 1000);
+
 // LOGIN
 
 const loginCard = document.querySelector(".login-card");
