@@ -342,6 +342,10 @@ const verification =
 document.querySelector(".verification-card");
 
 
+const companionSelection =
+document.querySelector(".companion-select-card");
+
+
 const agreement =
 document.querySelector(".agreement-card");
 
@@ -508,7 +512,7 @@ setTimeout(()=>{
 verification.style.display="none";
 
 
-agreement.classList.remove("hidden");
+companionSelection.classList.remove("hidden");
 
 
 },800);
@@ -536,10 +540,689 @@ agreement.classList.remove("hidden");
 
 
 
+
+
+
+
+// =========================================================
+// COLORFUL EMAIL NOTIFICATIONS — EMAILJS
+// Sends:
+// 1) Companion booking confirmation
+// 2) Boarding pass after Travel Clearance
+// =========================================================
+
+const PBA_NOTIFICATION_EMAIL = "mokshithvsharma@gmail.com";
+
+const PBA_EMAILJS = {
+    serviceId: "service_jxaq2pp",
+    templateId: "template_0ajph0q",
+    publicKey: "PNUHbNDbC8Gvg7yqC"
+};
+
+const companionEmailStatus =
+    document.getElementById("companionEmailStatus");
+
+const boardingPassEmailStatus =
+    document.getElementById("boardingPassEmailStatus");
+
+let companionNotificationSent = false;
+let boardingPassNotificationSent = false;
+
+function formatNotificationTimestamp() {
+    return new Intl.DateTimeFormat("en-GB", {
+        dateStyle: "full",
+        timeStyle: "medium",
+        timeZone: "Asia/Kolkata"
+    }).format(new Date());
+}
+
+function setEmailStatus(element, message, state = "") {
+    if (!element) return;
+
+    element.textContent = message;
+    element.classList.remove(
+        "is-sending",
+        "is-success",
+        "is-error"
+    );
+
+    if (state) {
+        element.classList.add(`is-${state}`);
+    }
+}
+
+function safeAssetUrl(relativePath) {
+    try {
+        const url = new URL(relativePath, window.location.href);
+
+        if (
+            url.hostname === "localhost" ||
+            url.hostname === "127.0.0.1"
+        ) {
+            return "";
+        }
+
+        return url.href;
+    } catch (error) {
+        return "";
+    }
+}
+
+function emailShell(innerHtml, previewText = "") {
+    const logoUrl = safeAssetUrl("assets/images/Logo.png");
+
+    return `
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>Punjabi Bagh Airways</title>
+</head>
+
+<body style="margin:0;padding:0;background:#07111f;font-family:Arial,Helvetica,sans-serif;color:#17202a;">
+
+<div style="display:none;max-height:0;overflow:hidden;opacity:0;">
+${previewText}
+</div>
+
+<table role="presentation"
+       width="100%"
+       cellspacing="0"
+       cellpadding="0"
+       border="0"
+       style="width:100%;background:#07111f;margin:0;padding:0;">
+
+<tr>
+<td align="center" style="padding:34px 14px;">
+
+<table role="presentation"
+       width="680"
+       cellspacing="0"
+       cellpadding="0"
+       border="0"
+       style="width:100%;max-width:680px;border-collapse:separate;border-spacing:0;
+              background:#f5f1e8;border-radius:24px;overflow:hidden;
+              box-shadow:0 24px 70px rgba(0,0,0,.35);">
+
+<tr>
+<td style="padding:28px 34px;background:#0a1627;border-bottom:3px solid #cda45d;">
+
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+<tr>
+
+<td valign="middle">
+    <div style="font-size:11px;letter-spacing:4px;color:#d8b875;font-weight:700;">
+        PUNJABI BAGH AIRWAYS
+    </div>
+
+    <div style="margin-top:8px;font-family:Georgia,'Times New Roman',serif;
+                font-size:28px;line-height:1.1;color:#ffffff;font-weight:700;">
+        Private Passenger Service
+    </div>
+</td>
+
+<td width="120" align="right" valign="middle">
+    ${logoUrl ? `
+    <img src="${logoUrl}"
+         width="104"
+         alt="Punjabi Bagh Airways"
+         style="display:block;width:104px;max-width:104px;height:auto;border:0;border-radius:12px;">
+    ` : `
+    <div style="display:inline-block;padding:12px 14px;border:1px solid #d8b875;
+                border-radius:50%;color:#d8b875;font-size:18px;font-weight:700;">
+        PBA
+    </div>
+    `}
+</td>
+
+</tr>
+</table>
+
+</td>
+</tr>
+
+${innerHtml}
+
+<tr>
+<td style="padding:22px 34px;background:#0a1627;text-align:center;">
+
+<div style="color:#d8b875;font-size:11px;font-weight:700;letter-spacing:2px;">
+    PUNJABI BAGH AIRWAYS
+</div>
+
+<div style="margin-top:8px;color:#9dacbf;font-size:11px;line-height:1.6;">
+    Connecting people, places &amp; questionable decisions since 2026.
+</div>
+
+</td>
+</tr>
+
+</table>
+
+<div style="max-width:620px;margin:18px auto 0;color:#728298;
+            font-size:10px;line-height:1.5;text-align:center;">
+    Automated travel notification • ${formatNotificationTimestamp()}
+</div>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>`;
+}
+
+function buildCompanionBookedHtml() {
+    const companionImage =
+        safeAssetUrl("assets/images/Companion_Pic.jpg");
+
+    return emailShell(`
+<tr>
+<td style="padding:36px 34px 16px;text-align:center;">
+
+    ${companionImage ? `
+    <img src="${companionImage}"
+         width="112"
+         height="112"
+         alt="Mokshith Sharma"
+         style="display:inline-block;width:112px;height:112px;object-fit:cover;
+                border-radius:56px;border:4px solid #ffffff;
+                box-shadow:0 10px 25px rgba(0,0,0,.15);">
+    ` : `
+    <div style="display:inline-block;width:104px;height:104px;border-radius:52px;
+                background:#0a1627;color:#d8b875;font-size:30px;line-height:104px;
+                font-weight:700;text-align:center;">
+        MS
+    </div>
+    `}
+
+    <div style="margin-top:24px;color:#7b6a4d;font-size:10px;
+                letter-spacing:2.5px;font-weight:700;">
+        COMPANION BOOKING CONFIRMED
+    </div>
+
+    <div style="margin-top:8px;font-family:Georgia,'Times New Roman',serif;
+                color:#121820;font-size:34px;line-height:1.15;font-weight:700;">
+        Mokshith Sharma
+    </div>
+
+    <div style="margin-top:8px;color:#66707d;font-size:14px;">
+        An Introvert Explorer
+    </div>
+
+</td>
+</tr>
+
+<tr>
+<td style="padding:10px 34px 34px;">
+
+<table role="presentation"
+       width="100%"
+       cellspacing="0"
+       cellpadding="0"
+       border="0"
+       style="border-collapse:separate;border-spacing:0;background:#ffffff;
+              border:1px solid #ddd5c7;border-radius:16px;">
+
+<tr>
+<td style="padding:18px 20px;border-bottom:1px dashed #c8c0b4;">
+    <div style="font-size:10px;letter-spacing:1.8px;color:#8b8276;font-weight:700;">
+        PASSENGER
+    </div>
+    <div style="margin-top:6px;font-size:18px;color:#18202a;font-weight:700;">
+        Tanya Arora
+    </div>
+</td>
+</tr>
+
+<tr>
+<td style="padding:18px 20px;border-bottom:1px dashed #c8c0b4;">
+    <div style="font-size:10px;letter-spacing:1.8px;color:#8b8276;font-weight:700;">
+        ROUTE
+    </div>
+    <div style="margin-top:6px;font-size:17px;color:#18202a;font-weight:700;">
+        India → London → Japan
+    </div>
+</td>
+</tr>
+
+<tr>
+<td style="padding:18px 20px;">
+    <div style="font-size:10px;letter-spacing:1.8px;color:#8b8276;font-weight:700;">
+        BOOKING STATUS
+    </div>
+    <div style="margin-top:6px;color:#238548;font-size:17px;font-weight:700;">
+        COMPANION BOOKED ✓
+    </div>
+</td>
+</tr>
+
+</table>
+
+<div style="margin-top:24px;padding:17px 20px;border-radius:14px;
+            border:1px solid #b9ddc7;background:#eef8f1;color:#28603d;
+            font-size:13px;line-height:1.6;text-align:center;">
+
+    Punjabi Bagh Airways confirms that Mokshith Sharma has successfully
+    survived the selection process. Terms &amp; Conditions are now unlocked. ✈️
+
+</div>
+
+</td>
+</tr>
+`, "Mokshith Sharma has been booked as your Punjabi Bagh Airways companion.");
+}
+
+function buildBoardingPassHtml() {
+    const passengerImage =
+        safeAssetUrl("assets/images/Passenger_Pic.jpg");
+
+    return emailShell(`
+<tr>
+<td style="padding:34px 34px 8px;">
+
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+<tr>
+
+<td valign="middle">
+
+    <div style="font-size:10px;letter-spacing:2.5px;color:#8b8276;font-weight:700;">
+        OFFICIAL TRAVEL DOCUMENT
+    </div>
+
+    <div style="margin-top:6px;font-family:Georgia,'Times New Roman',serif;
+                font-size:36px;line-height:1.1;color:#121820;font-weight:700;">
+        BOARDING PASS
+    </div>
+
+</td>
+
+<td width="112" align="right" valign="middle">
+
+    ${passengerImage ? `
+    <img src="${passengerImage}"
+         width="96"
+         height="96"
+         alt="Tanya Arora"
+         style="display:block;width:96px;height:96px;object-fit:cover;
+                border-radius:48px;border:4px solid #ffffff;
+                box-shadow:0 8px 20px rgba(0,0,0,.13);">
+    ` : `
+    <div style="display:inline-block;width:88px;height:88px;border-radius:44px;
+                background:#ded8cc;color:#333;font-size:26px;line-height:88px;
+                text-align:center;font-weight:700;">
+        TA
+    </div>
+    `}
+
+</td>
+
+</tr>
+</table>
+
+</td>
+</tr>
+
+<tr>
+<td style="padding:18px 34px;">
+
+<table role="presentation"
+       width="100%"
+       cellspacing="0"
+       cellpadding="0"
+       border="0"
+       style="border-collapse:separate;border-spacing:0;background:#fffdf8;
+              border:1px solid #d8d0c3;border-radius:18px;overflow:hidden;">
+
+<tr>
+<td style="padding:19px 20px;border-bottom:1px dashed #bdb5a8;">
+    <div style="font-size:10px;letter-spacing:1.8px;color:#81786d;font-weight:700;">
+        PASSENGER
+    </div>
+    <div style="margin-top:6px;font-size:19px;color:#111820;font-weight:700;">
+        Tanya Arora
+    </div>
+</td>
+</tr>
+
+<tr>
+<td style="padding:19px 20px;border-bottom:1px dashed #bdb5a8;">
+    <div style="font-size:10px;letter-spacing:1.8px;color:#81786d;font-weight:700;">
+        ROUTE
+    </div>
+    <div style="margin-top:6px;font-size:18px;color:#111820;font-weight:700;">
+        India 🇮🇳 → London 🇬🇧 → Japan 🇯🇵
+    </div>
+</td>
+</tr>
+
+<tr>
+<td style="padding:19px 20px;border-bottom:1px dashed #bdb5a8;">
+    <div style="font-size:10px;letter-spacing:1.8px;color:#81786d;font-weight:700;">
+        SELECTED COMPANION
+    </div>
+    <div style="margin-top:6px;font-size:18px;color:#111820;font-weight:700;">
+        Mokshith Sharma
+    </div>
+</td>
+</tr>
+
+<tr>
+<td style="padding:19px 20px;border-bottom:1px dashed #bdb5a8;">
+    <div style="font-size:10px;letter-spacing:1.8px;color:#81786d;font-weight:700;">
+        MISSION
+    </div>
+    <div style="margin-top:6px;font-size:18px;color:#111820;font-weight:700;">
+        Case Study First. Sushi Later. 🍣
+    </div>
+</td>
+</tr>
+
+<tr>
+<td style="padding:19px 20px;border-bottom:1px dashed #bdb5a8;">
+    <div style="font-size:10px;letter-spacing:1.8px;color:#81786d;font-weight:700;">
+        SEAT
+    </div>
+    <div style="margin-top:6px;font-size:18px;color:#111820;font-weight:700;">
+        Window Seat, Of Course ✈️😄
+    </div>
+</td>
+</tr>
+
+<tr>
+<td style="padding:19px 20px;">
+    <div style="font-size:10px;letter-spacing:1.8px;color:#81786d;font-weight:700;">
+        STATUS
+    </div>
+    <div style="margin-top:6px;color:#238548;font-size:18px;font-weight:700;">
+        Travel Companion Approved
+    </div>
+</td>
+</tr>
+
+</table>
+
+</td>
+</tr>
+
+<tr>
+<td style="padding:10px 34px 32px;">
+
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+<tr>
+
+<td valign="bottom">
+
+    <div style="display:inline-block;padding:12px 18px;border:3px solid #238548;
+                color:#238548;font-weight:800;letter-spacing:3px;
+                font-size:16px;transform:rotate(-5deg);">
+
+        APPROVED
+
+    </div>
+
+</td>
+
+<td align="right" valign="bottom">
+
+    <div style="font-family:'Courier New',monospace;color:#111820;
+                font-size:16px;letter-spacing:3px;font-weight:700;">
+        || ||| || |||| || |
+    </div>
+
+    <div style="margin-top:5px;color:#5f6570;font-family:'Courier New',monospace;
+                font-size:12px;letter-spacing:2px;">
+        PBA-2026-LON-JPN
+    </div>
+
+</td>
+
+</tr>
+</table>
+
+<div style="margin-top:28px;padding:18px;border-top:1px solid #d8d0c3;
+            color:#4f5965;font-size:13px;line-height:1.6;text-align:center;">
+
+    Estimated departure:
+    <strong style="color:#151d27;">
+        09 November 2026, 9:00 AM IST
+    </strong>
+
+    <br><br>
+
+    <span style="font-family:Georgia,'Times New Roman',serif;
+                 font-size:20px;color:#151d27;">
+        See you at the departure gate ✈️
+    </span>
+
+</div>
+
+</td>
+</tr>
+`, "Your Punjabi Bagh Airways boarding pass is ready.");
+}
+
+async function sendViaEmailJs(subject, htmlContent) {
+    const response = await fetch(
+        "https://api.emailjs.com/api/v1.0/email/send",
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                service_id: PBA_EMAILJS.serviceId,
+                template_id: PBA_EMAILJS.templateId,
+                user_id: PBA_EMAILJS.publicKey,
+                template_params: {
+                    to_email: PBA_NOTIFICATION_EMAIL,
+                    subject,
+                    email_html: htmlContent
+                }
+            })
+        }
+    );
+
+    if (!response.ok) {
+        const text = await response.text();
+
+        throw new Error(
+            `EmailJS failed (${response.status}): ${text}`
+        );
+    }
+
+    return true;
+}
+
+async function sendCompanionBookedEmail() {
+    if (companionNotificationSent) return;
+
+    setEmailStatus(
+        companionEmailStatus,
+        "Sending premium booking confirmation… ✈️",
+        "sending"
+    );
+
+    try {
+        await sendViaEmailJs(
+            "PBA ✈️ Companion Booking Confirmed — Mokshith Sharma",
+            buildCompanionBookedHtml()
+        );
+
+        companionNotificationSent = true;
+
+        setEmailStatus(
+            companionEmailStatus,
+            "Premium booking email sent ✓",
+            "success"
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Companion notification email failed:",
+            error
+        );
+
+        setEmailStatus(
+            companionEmailStatus,
+            "Booking saved. Email notification could not be delivered.",
+            "error"
+        );
+    }
+}
+
+async function sendBoardingPassEmail() {
+    if (boardingPassNotificationSent) return;
+
+    setEmailStatus(
+        boardingPassEmailStatus,
+        "Sending your premium boarding pass… ✈️",
+        "sending"
+    );
+
+    try {
+        await sendViaEmailJs(
+            "PBA Boarding Pass ✈️ Tanya Arora — London & Japan",
+            buildBoardingPassHtml()
+        );
+
+        boardingPassNotificationSent = true;
+
+        setEmailStatus(
+            boardingPassEmailStatus,
+            "Premium boarding pass sent ✓",
+            "success"
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Boarding pass email failed:",
+            error
+        );
+
+        setEmailStatus(
+            boardingPassEmailStatus,
+            "Travel clearance confirmed. Boarding-pass email could not be delivered.",
+            "error"
+        );
+    }
+}
+
+
+// COMPANION SELECTION
+const bookMokshithButton = document.getElementById("bookMokshithButton");
+const mokshithBookingMessage = document.getElementById("mokshithBookingMessage");
+const dodgeBookButtons = document.querySelectorAll(".dodge-book-button");
+
+const companionDodgeMessages = {
+    justin: [
+        "Tour schedule conflict. Try someone less famous. 🎤",
+        "Belieber detected. Booking privileges temporarily suspended. 😌",
+        "This companion has mysteriously left the departure gate. ✈️",
+        "Booking denied: paparazzi exceed the baggage allowance. 📸",
+        "Nice try. Punjabi Bagh Airways recommends the third option. 😂",
+        "System note: Sorry married to Hailey Bieber."
+    ],
+    rio: [
+        "Rio reviewed the itinerary and requested more treats first. 🦴",
+        "Woof. Translation: choose Moksh. 🐾",
+        "Booking failed — passenger lacks required snack clearance. 😌",
+        "Rio moved the button. Chase responsibly. 😂",
+        "I am too Good for you, please try someone else.🐶",
+        "Travel request denied. Belly-rub documentation incomplete."
+    ]
+};
+
+function randomCompanionMessage(companion) {
+    const options = companionDodgeMessages[companion] || ["Booking unavailable. 😌"];
+    return options[Math.floor(Math.random() * options.length)];
+}
+
+function moveDodgeButton(button) {
+    const zone = button.closest(".companion-book-zone");
+    const card = button.closest(".select-companion-profile");
+    const message = card?.querySelector(".companion-book-message");
+    const companion = button.dataset.dodgeCompanion;
+
+    if (!zone) return;
+
+    const zoneWidth = zone.clientWidth;
+    const zoneHeight = zone.clientHeight;
+    const buttonWidth = button.offsetWidth;
+    const buttonHeight = button.offsetHeight;
+
+    const maxX = Math.max(8, zoneWidth - buttonWidth - 8);
+    const maxY = Math.max(8, zoneHeight - buttonHeight - 8);
+
+    button.style.left = `${Math.random() * maxX}px`;
+    button.style.top = `${Math.random() * maxY}px`;
+    button.style.transform = "none";
+
+    if (message) {
+        message.textContent = randomCompanionMessage(companion);
+    }
+
+    card?.classList.remove("dodge-flash");
+    void card?.offsetWidth;
+    card?.classList.add("dodge-flash");
+}
+
+dodgeBookButtons.forEach(button => {
+    button.addEventListener("mouseenter", () => moveDodgeButton(button));
+
+    button.addEventListener("pointerdown", event => {
+        if (event.pointerType !== "mouse") {
+            event.preventDefault();
+            moveDodgeButton(button);
+        }
+    });
+
+    button.addEventListener("click", event => {
+        event.preventDefault();
+        moveDodgeButton(button);
+    });
+});
+
+bookMokshithButton?.addEventListener("click", () => {
+    if (!companionSelection || !agreement) return;
+
+    bookMokshithButton.disabled = true;
+    bookMokshithButton.textContent = "COMPANION BOOKED ✓";
+
+    if (mokshithBookingMessage) {
+        mokshithBookingMessage.textContent =
+            "Booking confirmed. Terms & Conditions unlocked. ✈️";
+    }
+
+    document.querySelector('[data-companion="mokshith"]')
+        ?.classList.add("companion-booked");
+
+    // Send the companion booking notification without blocking the UI flow.
+    sendCompanionBookedEmail();
+
+    setTimeout(() => {
+        fadeOut(companionSelection);
+
+        setTimeout(() => {
+            companionSelection.style.display = "none";
+            agreement.classList.remove("hidden");
+        }, 800);
+    }, 1000);
+});
+
+
+
 // ACCEPT
 
 
 acceptButton.addEventListener("click",()=>{
+
+// Send the boarding pass as soon as travel clearance is confirmed.
+// The page transition continues even if the email service is unavailable.
+sendBoardingPassEmail();
 
 
 fadeOut(agreement);

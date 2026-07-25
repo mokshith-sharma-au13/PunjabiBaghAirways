@@ -2454,3 +2454,458 @@ body.cinematic-intro-complete .music-player {
         transform .6s ease;
     pointer-events: none;
 }
+
+/* =========================================================
+   COMPANION SELECTION
+========================================================= */
+
+.companion-select-card {
+    width: min(1180px, 95vw);
+    max-width: 1180px;
+    padding: 38px;
+}
+
+.companion-select-card > h1 {
+    margin-bottom: 12px;
+}
+
+.companion-select-intro {
+    max-width: 760px;
+    margin-bottom: 30px;
+    color: rgba(255,255,255,.78);
+    line-height: 1.65;
+}
+
+.companion-selection-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    align-items: stretch;
+}
+
+.select-companion-profile {
+    position: relative;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 22px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.17);
+    border-radius: 20px;
+    background:
+        linear-gradient(160deg,
+            rgba(255,255,255,.13),
+            rgba(255,255,255,.055));
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.12),
+        0 18px 42px rgba(0,0,0,.20);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease;
+}
+
+.select-companion-profile:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255,255,255,.30);
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.17),
+        0 24px 52px rgba(0,0,0,.28);
+}
+
+.available-profile {
+    border-color: rgba(143,240,180,.34);
+}
+
+.available-profile::before,
+.unavailable-profile::before {
+    position: absolute;
+    top: 17px;
+    right: 16px;
+    padding: 6px 9px;
+    border-radius: 999px;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 1.15px;
+}
+
+.available-profile::before {
+    content: "AVAILABLE";
+    border: 1px solid rgba(143,240,180,.30);
+    background: rgba(35,133,72,.18);
+    color: #aef1c5;
+}
+
+.unavailable-profile::before {
+    content: "LIMITED AVAILABILITY";
+    border: 1px solid rgba(255,211,126,.20);
+    background: rgba(255,194,80,.09);
+    color: rgba(255,224,166,.82);
+}
+
+.select-companion-avatar {
+    width: 88px;
+    height: 88px;
+    flex: 0 0 88px;
+    margin-bottom: 22px;
+    overflow: hidden;
+    border: 3px solid rgba(255,255,255,.82);
+    border-radius: 50%;
+    box-shadow: 0 12px 28px rgba(0,0,0,.28);
+}
+
+.select-companion-avatar img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center;
+}
+
+.text-avatar {
+    display: grid;
+    place-items: center;
+    background:
+        radial-gradient(circle at 30% 22%, rgba(255,255,255,.24), rgba(255,255,255,.07) 60%),
+        rgba(7,14,24,.56);
+    font-size: 38px;
+}
+
+.justin-avatar {
+    background:
+        radial-gradient(circle at 30% 22%, rgba(255,219,146,.28), rgba(255,255,255,.07) 60%),
+        rgba(7,14,24,.56);
+}
+
+.rio-avatar {
+    background:
+        radial-gradient(circle at 30% 22%, rgba(185,224,255,.25), rgba(255,255,255,.07) 60%),
+        rgba(7,14,24,.56);
+}
+
+.select-profile-heading,
+.select-profile-section {
+    padding: 14px 0;
+    border-bottom: 1px dashed rgba(255,255,255,.22);
+}
+
+.select-profile-heading span,
+.select-profile-section h2 {
+    display: block;
+    margin-bottom: 7px;
+    color: rgba(255,255,255,.52);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.select-profile-heading strong {
+    color: #fff;
+    font-size: 18px;
+    line-height: 1.35;
+}
+
+.select-profile-section h2 {
+    font-family: 'Inter', sans-serif;
+}
+
+.select-profile-section p {
+    color: rgba(255,255,255,.88);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.55;
+}
+
+.select-profile-list {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: rgba(255,255,255,.88);
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+.select-travel-rating {
+    color: #f5c76d !important;
+    font-size: 21px !important;
+    letter-spacing: 4px;
+}
+
+.companion-book-zone {
+    position: relative;
+    height: 86px;
+    margin-top: auto;
+    padding-top: 14px;
+    overflow: hidden;
+    border-radius: 16px;
+}
+
+.normal-book-zone {
+    display: grid;
+    place-items: center;
+}
+
+.companion-book-button {
+    min-width: 160px;
+    padding: 12px 19px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .25px;
+    white-space: nowrap;
+}
+
+.dodge-book-button {
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 1px solid rgba(255,255,255,.27);
+    background: rgba(255,255,255,.11);
+    color: #fff;
+}
+
+.dodge-book-button:hover {
+    transform: none;
+    background: rgba(255,255,255,.17);
+}
+
+.available-book-button {
+    width: 100%;
+    max-width: 240px;
+    background: #fff;
+    color: #111;
+    box-shadow: 0 12px 27px rgba(0,0,0,.23);
+}
+
+.available-book-button:hover {
+    background: #f4f0e7;
+}
+
+.available-book-button:disabled {
+    cursor: default;
+    background: #8ff0b4;
+    color: #143823;
+    transform: none;
+}
+
+.companion-book-message {
+    min-height: 39px;
+    margin-top: 5px;
+    color: rgba(255,255,255,.62);
+    font-size: 11px;
+    line-height: 1.45;
+    text-align: center;
+}
+
+.mokshith-message {
+    color: rgba(174,241,197,.78);
+}
+
+.select-companion-profile.dodge-flash {
+    animation: companionDodgeFlash .34s ease;
+}
+
+.select-companion-profile.companion-booked {
+    border-color: rgba(143,240,180,.62);
+    box-shadow:
+        0 0 0 1px rgba(143,240,180,.18),
+        0 22px 58px rgba(35,133,72,.18);
+}
+
+.companion-selection-footer {
+    margin-top: 24px;
+    padding: 15px 18px 0;
+    border-top: 1px solid rgba(255,255,255,.16);
+    color: rgba(255,255,255,.60);
+    text-align: center;
+}
+
+.companion-selection-footer span {
+    display: block;
+    margin-bottom: 6px;
+    color: rgba(255,255,255,.46);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.companion-selection-footer p {
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.selected-companion-confirmation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin: -8px 0 24px;
+    padding: 13px 16px;
+    border: 1px solid rgba(143,240,180,.26);
+    border-radius: 13px;
+    background: rgba(35,133,72,.10);
+}
+
+.selected-companion-confirmation span {
+    color: rgba(255,255,255,.56);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.8px;
+}
+
+.selected-companion-confirmation strong {
+    color: #9defb8;
+    font-size: 14px;
+}
+
+@keyframes companionDodgeFlash {
+    0%, 100% { transform: translateY(-4px); }
+    50% { transform: translateY(-4px) rotate(.4deg) scale(1.008); }
+}
+
+@media(max-width:980px) {
+    .companion-select-card {
+        width: min(760px, 94vw);
+    }
+
+    .companion-selection-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media(max-width:600px) {
+    .companion-select-card {
+        width: 100%;
+        padding: 24px 18px;
+    }
+
+    .select-companion-profile {
+        padding: 18px;
+    }
+
+    .select-companion-avatar {
+        width: 80px;
+        height: 80px;
+        flex-basis: 80px;
+    }
+
+    .unavailable-profile::before,
+    .available-profile::before {
+        max-width: 135px;
+        text-align: center;
+    }
+
+    .selected-companion-confirmation {
+        display: grid;
+        gap: 6px;
+    }
+}
+
+
+
+/* =========================================================
+   COMPANION BOOKING MESSAGE — READABILITY UPDATE
+========================================================= */
+
+.companion-book-message {
+    min-height: 48px;
+    margin-top: 8px;
+    padding: 9px 12px;
+    border: 1px solid rgba(255, 255, 255, .13);
+    border-radius: 11px;
+    background: rgba(0, 0, 0, .16);
+    color: rgba(255, 255, 255, .90);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.45;
+    letter-spacing: .05px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+        background .2s ease,
+        border-color .2s ease,
+        transform .2s ease;
+}
+
+.mokshith-message {
+    color: #baf4cd;
+    background: rgba(35, 133, 72, .12);
+    border-color: rgba(143, 240, 180, .18);
+}
+
+.select-companion-profile.dodge-flash .companion-book-message {
+    background: rgba(255, 255, 255, .11);
+    border-color: rgba(255, 255, 255, .24);
+}
+
+@media(max-width:600px) {
+    .companion-book-message {
+        min-height: 52px;
+        padding: 10px 12px;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+}
+
+
+/* =========================================================
+   EMAIL NOTIFICATION STATUS
+========================================================= */
+
+.email-notification-status {
+    min-height: 22px;
+    margin-top: 8px;
+    color: rgba(255,255,255,.72);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.45;
+    text-align: center;
+    transition:
+        color .2s ease,
+        opacity .2s ease,
+        transform .2s ease;
+}
+
+.email-notification-status:empty {
+    min-height: 0;
+    margin-top: 0;
+}
+
+.email-notification-status.is-sending {
+    color: rgba(255,224,166,.92);
+    animation: emailStatusPulse 1.1s ease-in-out infinite;
+}
+
+.email-notification-status.is-success {
+    color: #9defb8;
+}
+
+.email-notification-status.is-error {
+    color: #ffb0b0;
+}
+
+.clearance-email-status {
+    margin-top: 12px;
+}
+
+@keyframes emailStatusPulse {
+    0%, 100% {
+        opacity: .62;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+@media(max-width:600px) {
+    .email-notification-status {
+        font-size: 12px;
+        line-height: 1.5;
+    }
+}
