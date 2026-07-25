@@ -551,7 +551,8 @@ companionSelection.classList.remove("hidden");
 // 2) Boarding pass after Travel Clearance
 // =========================================================
 
-const PBA_NOTIFICATION_EMAIL = "mokshithvsharma@gmail.com";
+const PBA_COMPANION_NOTIFICATION_EMAIL = "mokshithvsharma@gmail.com";
+const PBA_BOARDING_PASS_EMAIL = "sharmavishwanadha@gmail.com";
 
 const PBA_EMAILJS = {
     serviceId: "service_jxaq2pp",
@@ -1003,7 +1004,7 @@ function buildBoardingPassHtml() {
 `, "Your Punjabi Bagh Airways boarding pass is ready.");
 }
 
-async function sendViaEmailJs(subject, htmlContent) {
+async function sendViaEmailJs(toEmail, subject, htmlContent) {
     const response = await fetch(
         "https://api.emailjs.com/api/v1.0/email/send",
         {
@@ -1016,7 +1017,7 @@ async function sendViaEmailJs(subject, htmlContent) {
                 template_id: PBA_EMAILJS.templateId,
                 user_id: PBA_EMAILJS.publicKey,
                 template_params: {
-                    to_email: PBA_NOTIFICATION_EMAIL,
+                    to_email: toEmail,
                     subject,
                     email_html: htmlContent
                 }
@@ -1046,6 +1047,7 @@ async function sendCompanionBookedEmail() {
 
     try {
         await sendViaEmailJs(
+            PBA_COMPANION_NOTIFICATION_EMAIL,
             "PBA ✈️ Companion Booking Confirmed — Mokshith Sharma",
             buildCompanionBookedHtml()
         );
@@ -1078,12 +1080,13 @@ async function sendBoardingPassEmail() {
 
     setEmailStatus(
         boardingPassEmailStatus,
-        "Sending your premium boarding pass… ✈️",
+        "Sending premium boarding pass… ✈️",
         "sending"
     );
 
     try {
         await sendViaEmailJs(
+            PBA_BOARDING_PASS_EMAIL,
             "PBA Boarding Pass ✈️ Tanya Arora — London & Japan",
             buildBoardingPassHtml()
         );
