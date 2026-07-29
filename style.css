@@ -3847,3 +3847,79 @@ body.journey-sequence-running .cinematic-skip {
     backface-visibility:hidden;
     -webkit-backface-visibility:hidden;
 }
+
+
+/* =========================================================
+   iPad / WebKit stability fixes
+   - GPU-based opening slider
+   - Reliable Boarding Pass repaint after tab changes
+========================================================= */
+
+/* Slider: avoid changing left/width during every pointer movement. */
+.journey-swipe {
+    contain: layout paint;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.journey-swipe-fill {
+    width: 100% !important;
+    transform: scaleX(0);
+    transform-origin: left center;
+    will-change: transform;
+    transition: transform .24s ease-out;
+}
+
+.journey-swipe-handle {
+    left: 0 !important;
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transition:
+        box-shadow .2s ease,
+        transform .24s ease-out;
+}
+
+.journey-swipe.is-dragging .journey-swipe-fill,
+.journey-swipe.is-dragging .journey-swipe-handle {
+    transition: none;
+}
+
+.journey-swipe.is-dragging .journey-swipe-handle {
+    cursor: grabbing;
+}
+
+/* Preserve the original slight enlargement without replacing translation. */
+.journey-swipe.is-dragging .journey-swipe-handle::after {
+    content: "";
+}
+
+/* Once the initial reveal has played, prevent WebKit from returning these
+   elements to their pre-animation opacity after a tab switch. */
+.ticket-content.portal-reveal-complete .boarding-details,
+.ticket-content.portal-reveal-complete .boarding-barcode {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+}
+
+/* A short-lived class used only to force an iPad/WebKit repaint. */
+.travel-panel.webkit-repaint {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+/* iPad/WebKit compositing support for the Boarding Pass content. */
+@supports (-webkit-touch-callout: none) {
+    #boarding-panel,
+    #boarding-panel .boarding-details,
+    #boarding-panel .boarding-barcode,
+    #boarding-panel .boarding-pass-heading,
+    #boarding-panel .countdown-approval-wrap {
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+    }
+}

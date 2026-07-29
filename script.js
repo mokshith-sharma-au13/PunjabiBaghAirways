@@ -8,29 +8,41 @@ const journeySwipeLabel = document.getElementById("journeySwipeLabel");
 let journeySwipeDragging = false;
 let journeySwipeProgress = 0;
 let journeyStarted = false;
+let journeySwipeFrame = null;
 
 function setJourneySwipeProgress(progress) {
     const safe = Math.max(0, Math.min(1, progress));
     journeySwipeProgress = safe;
 
-    if (journeySwipeHandle) {
-        journeySwipeHandle.style.left =
-            `calc(${safe * 100}% - ${safe * 54}px)`;
+    if (journeySwipeFrame !== null) {
+        cancelAnimationFrame(journeySwipeFrame);
     }
 
-    if (journeySwipeFill) {
-        journeySwipeFill.style.width = `${safe * 100}%`;
-    }
+    journeySwipeFrame = requestAnimationFrame(() => {
+        if (journeySwipeHandle && journeySwipe) {
+            const availableDistance =
+                Math.max(0, journeySwipe.clientWidth - 54);
 
-    journeySwipe?.setAttribute(
-        "aria-valuenow",
-        String(Math.round(safe * 100))
-    );
+            journeySwipeHandle.style.transform =
+                `translate3d(${safe * availableDistance}px, 0, 0)`;
+        }
 
-    if (journeySwipeLabel) {
-        journeySwipeLabel.textContent =
-            safe > .72 ? "Release to begin" : "Swipe to begin";
-    }
+        if (journeySwipeFill) {
+            journeySwipeFill.style.transform = `scaleX(${safe})`;
+        }
+
+        journeySwipe?.setAttribute(
+            "aria-valuenow",
+            String(Math.round(safe * 100))
+        );
+
+        if (journeySwipeLabel) {
+            journeySwipeLabel.textContent =
+                safe > .72 ? "Release to begin" : "Swipe to begin";
+        }
+
+        journeySwipeFrame = null;
+    });
 }
 
 function beginJourneyExperience() {
@@ -1451,6 +1463,13 @@ window.setTimeout(() => {
     countdownStatus?.classList.remove("stamp-status-pulse");
 }, 720);
 
+// After the one-time boarding animation finishes, keep the passenger
+// details permanently painted. This avoids a WebKit/iPad repaint issue
+// when returning to the Boarding Pass tab.
+window.setTimeout(() => {
+    ticket.classList.add("portal-reveal-complete");
+}, 2250);
+
 
 },1650);
 
@@ -1591,21 +1610,38 @@ journalInput?.addEventListener("keydown", event => {
 const travelTabs = document.querySelectorAll(".travel-tab");
 const travelPanels = document.querySelectorAll(".travel-panel");
 
-travelTabs.forEach(tab => {
-    tab.addEventListener("click", () => {
-        const targetPanelId = tab.dataset.tab;
+function activateTravelPanel(tab) {
+    const targetPanelId = tab.dataset.tab;
+    const targetPanel = document.getElementById(targetPanelId);
 
-        travelTabs.forEach(item => item.classList.remove("active"));
-        travelPanels.forEach(panel => panel.classList.remove("active"));
+    if (!targetPanel || tab.classList.contains("active")) return;
 
-        tab.classList.add("active");
-
-        const targetPanel = document.getElementById(targetPanelId);
-
-        if (targetPanel) {
-            targetPanel.classList.add("active");
-        }
+    travelTabs.forEach(item => {
+        item.classList.toggle("active", item === tab);
+        item.setAttribute("aria-selected", String(item === tab));
     });
+
+    travelPanels.forEach(panel => {
+        panel.classList.toggle("active", panel === targetPanel);
+        panel.setAttribute("aria-hidden", String(panel !== targetPanel));
+    });
+
+    // Force a reliable WebKit repaint after changing tabs.
+    // Reading offsetHeight flushes layout; the following frame paints
+    // the selected panel without changing its visual design.
+    void targetPanel.offsetHeight;
+
+    window.requestAnimationFrame(() => {
+        targetPanel.classList.add("webkit-repaint");
+
+        window.requestAnimationFrame(() => {
+            targetPanel.classList.remove("webkit-repaint");
+        });
+    });
+}
+
+travelTabs.forEach(tab => {
+    tab.addEventListener("click", () => activateTravelPanel(tab));
 });
 
 
