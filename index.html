@@ -29,7 +29,7 @@ Punjabi Bagh Airways ✈️
 
 
 
-<body class="cinematic-intro-active">
+<body class="cinematic-intro-active journey-gate-active">
 
 
 
@@ -49,6 +49,36 @@ Punjabi Bagh Airways ✈️
 
 
 <div class="video-overlay"></div>
+
+<section class="journey-gate" id="journeyGate" aria-label="Start journey">
+    <div class="journey-gate-shade" aria-hidden="true"></div>
+    <div class="journey-gate-card">
+        <span class="journey-gate-eyebrow">READY FOR DEPARTURE</span>
+        <h1>Start your journey</h1>
+        <p>Your experience is ready. Swipe to begin boarding.</p>
+
+        <div class="journey-swipe"
+             id="journeySwipe"
+             role="slider"
+             aria-label="Swipe to begin journey"
+             aria-valuemin="0"
+             aria-valuemax="100"
+             aria-valuenow="0"
+             tabindex="0">
+            <div class="journey-swipe-fill" id="journeySwipeFill"></div>
+            <span class="journey-swipe-label" id="journeySwipeLabel">Swipe to begin</span>
+            <button type="button"
+                    class="journey-swipe-handle"
+                    id="journeySwipeHandle"
+                    aria-label="Drag to start journey">✈</button>
+        </div>
+
+        <span class="journey-gate-footnote">
+            Boarding available for verified passengers only.
+        </span>
+
+    </div>
+</section>
 
 <!-- LIGHTWEIGHT CINEMATIC INTRO -->
 <section class="cinematic-opening"
@@ -82,6 +112,7 @@ Punjabi Bagh Airways ✈️
             id="cinematicSkip">
         Skip intro
     </button>
+
 </section>
 
 
@@ -628,9 +659,6 @@ TRAVEL COMPANION APPROVED
                 Availability status: Somehow cleared his entire calendar for this. 😌✈️
             </p>
 
-            <p class="email-notification-status"
-               id="companionEmailStatus"
-               aria-live="polite"></p>
         </article>
 
     </div>
@@ -762,9 +790,6 @@ Confirm Travel Clearance ✈️
 
 </button>
 
-<p class="email-notification-status clearance-email-status"
-   id="boardingPassEmailStatus"
-   aria-live="polite"></p>
 
 
 
@@ -798,25 +823,13 @@ Confirm Travel Clearance ✈️
         <p class="brand">PUNJABI BAGH AIRWAYS</p>
 
         <nav class="travel-tabs" aria-label="Travel information">
-            <button type="button" class="travel-tab active" data-tab="boarding-panel">
-                Boarding Pass
-            </button>
-
-            <button type="button" class="travel-tab" data-tab="itinerary-panel">
-                Itinerary
-            </button>
-
-            <button type="button" class="travel-tab" data-tab="companion-panel">
-                Companion Profile
-            </button>
-
-            <button type="button" class="travel-tab" data-tab="side-quests-panel">
-                Side Quests
-            </button>
-
-            <button type="button" class="travel-tab" data-tab="terms-panel">
-                Terms &amp; Conditions
-            </button>
+            <button type="button" class="travel-tab active" data-tab="boarding-panel">Boarding Pass</button>
+            <button type="button" class="travel-tab" data-tab="itinerary-panel">Itinerary</button>
+            <button type="button" class="travel-tab" data-tab="side-quests-panel">Side Quests</button>
+            <button type="button" class="travel-tab" data-tab="gallery-panel">Gallery</button>
+            <button type="button" class="travel-tab" data-tab="journal-panel">Journal</button>
+            <button type="button" class="travel-tab" data-tab="companion-panel">Companion</button>
+            <button type="button" class="travel-tab" data-tab="terms-panel">Terms</button>
         </nav>
 
         <!-- BOARDING PASS -->
@@ -831,50 +844,59 @@ Confirm Travel Clearance ✈️
                 </div>
             </div>
 
-            <section class="trip-countdown"
-                     id="tripCountdown"
-                     aria-label="Trip departure countdown">
+            <div class="countdown-approval-wrap">
 
-                <div class="countdown-heading">
-                    <div>
-                        <span class="countdown-eyebrow">NEXT DEPARTURE</span>
-                        <strong>India → London → Japan</strong>
+                <section class="trip-countdown"
+                         id="tripCountdown"
+                         aria-label="Trip departure countdown">
+
+                    <div class="countdown-heading">
+                        <div>
+                            <span class="countdown-eyebrow">NEXT DEPARTURE</span>
+                            <strong>India → London → Japan</strong>
+                        </div>
+
+                        <span class="countdown-status" id="countdownStatus">
+                            BOARDING SOON
+                        </span>
                     </div>
 
-                    <span class="countdown-status" id="countdownStatus">
-                        BOARDING SOON
-                    </span>
+                    <div class="countdown-grid" aria-live="polite">
+                        <div>
+                            <strong id="countdownDays">000</strong>
+                            <span>Days</span>
+                        </div>
+
+                        <div>
+                            <strong id="countdownHours">00</strong>
+                            <span>Hours</span>
+                        </div>
+
+                        <div>
+                            <strong id="countdownMinutes">00</strong>
+                            <span>Minutes</span>
+                        </div>
+
+                        <div>
+                            <strong id="countdownSeconds">00</strong>
+                            <span>Seconds</span>
+                        </div>
+                    </div>
+
+                    <p class="countdown-note" id="countdownNote">
+                        Estimated departure: 15 November 2026, 9:00 AM IST
+                    </p>
+
+                </section>
+
+                <div class="stamp hidden"
+                     aria-live="polite">
+                    APPROVED
                 </div>
 
-                <div class="countdown-grid" aria-live="polite">
-                    <div>
-                        <strong id="countdownDays">000</strong>
-                        <span>Days</span>
-                    </div>
+            </div>
 
-                    <div>
-                        <strong id="countdownHours">00</strong>
-                        <span>Hours</span>
-                    </div>
-
-                    <div>
-                        <strong id="countdownMinutes">00</strong>
-                        <span>Minutes</span>
-                    </div>
-
-                    <div>
-                        <strong id="countdownSeconds">00</strong>
-                        <span>Seconds</span>
-                    </div>
-                </div>
-
-                <p class="countdown-note" id="countdownNote">
-                    Estimated departure: 09 November 2026, 9:00 AM IST
-                </p>
-
-            </section>
-
-            <div class="ticket">
+            <div class="ticket boarding-details">
 
                 <div>
                     PASSENGER
@@ -903,9 +925,7 @@ Confirm Travel Clearance ✈️
 
             </div>
 
-            <div class="stamp hidden">APPROVED</div>
-
-            <p class="barcode">
+            <p class="barcode boarding-barcode">
                 || ||| || |||| || |
                 <br>
                 PBA-2026-LON-JPN
@@ -914,6 +934,23 @@ Confirm Travel Clearance ✈️
             <p class="final-message">
                 See you at the departure gate ✈️
             </p>
+
+            <div class="boarding-pass-email-box">
+                <label for="boardingPassRecipientEmail">Email this boarding pass</label>
+                <div class="boarding-pass-email-row">
+                    <input type="email"
+                           id="boardingPassRecipientEmail"
+                           placeholder="Enter email address"
+                           autocomplete="email"
+                           inputmode="email">
+                    <button type="button" id="sendBoardingPassEmailButton">
+                        Send Boarding Pass ✉️
+                    </button>
+                </div>
+                <p class="email-notification-status"
+                   id="boardingPassEmailStatus"
+                   aria-live="polite"></p>
+            </div>
 
         </div>
 
@@ -938,7 +975,7 @@ Confirm Travel Clearance ✈️
                 </article>
 
                 <article class="itinerary-item">
-                    <span class="itinerary-day">DAY 02–04</span>
+                    <span class="itinerary-day">DAY 02–03</span>
                     <div>
                         <strong>London Case Study Mission</strong>
                         <p>Meetings, school visits and psychology case-study activities.</p>
@@ -946,7 +983,7 @@ Confirm Travel Clearance ✈️
                 </article>
 
                 <article class="itinerary-item">
-                    <span class="itinerary-day">DAY 05</span>
+                    <span class="itinerary-day">DAY 04–05</span>
                     <div>
                         <strong>London Exploration</strong>
                         <p>City sightseeing followed by the evening flight to Japan.</p>
@@ -979,6 +1016,44 @@ Confirm Travel Clearance ✈️
 
             </div>
 
+        </div>
+
+        <!-- GALLERY -->
+        <div class="travel-panel" id="gallery-panel">
+            <h1>GALLERY</h1>
+            <p class="portal-intro">Your London and Japan memories will appear here.</p>
+
+            <section class="gallery-uploader">
+                <input type="file" id="galleryInput" accept="image/*" multiple hidden>
+                <button type="button" class="gallery-upload-button" id="galleryUploadButton">
+                    Upload Photos
+                </button>
+                <p class="gallery-empty-message" id="galleryEmptyMessage">
+                    No memories yet. Upload photos to build your travel album.
+                </p>
+            </section>
+
+            <div class="gallery-grid" id="galleryGrid" aria-live="polite"></div>
+        </div>
+
+        <!-- JOURNAL -->
+        <div class="travel-panel" id="journal-panel">
+            <h1>TRAVEL JOURNAL</h1>
+            <p class="portal-intro">Save quick notes, reminders and small ideas for the journey.</p>
+
+            <div class="journal-composer">
+                <textarea id="journalInput" rows="4" maxlength="500"
+                          placeholder="Write a travel note..."></textarea>
+                <button type="button" class="journal-add-button" id="journalAddButton">
+                    Add Note
+                </button>
+            </div>
+
+            <div class="journal-list" id="journalList" aria-live="polite">
+                <p class="journal-empty-message" id="journalEmptyMessage">
+                    No notes yet. Add your first travel thought.
+                </p>
+            </div>
         </div>
 
         <!-- COMPANION PROFILE -->

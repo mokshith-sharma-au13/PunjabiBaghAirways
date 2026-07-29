@@ -1,3 +1,129 @@
+// OPENING GLASS SWIPE GATE
+const journeyGate = document.getElementById("journeyGate");
+const journeySwipe = document.getElementById("journeySwipe");
+const journeySwipeHandle = document.getElementById("journeySwipeHandle");
+const journeySwipeFill = document.getElementById("journeySwipeFill");
+const journeySwipeLabel = document.getElementById("journeySwipeLabel");
+
+let journeySwipeDragging = false;
+let journeySwipeProgress = 0;
+let journeyStarted = false;
+
+function setJourneySwipeProgress(progress) {
+    const safe = Math.max(0, Math.min(1, progress));
+    journeySwipeProgress = safe;
+
+    if (journeySwipeHandle) {
+        journeySwipeHandle.style.left =
+            `calc(${safe * 100}% - ${safe * 54}px)`;
+    }
+
+    if (journeySwipeFill) {
+        journeySwipeFill.style.width = `${safe * 100}%`;
+    }
+
+    journeySwipe?.setAttribute(
+        "aria-valuenow",
+        String(Math.round(safe * 100))
+    );
+
+    if (journeySwipeLabel) {
+        journeySwipeLabel.textContent =
+            safe > .72 ? "Release to begin" : "Swipe to begin";
+    }
+}
+
+function beginJourneyExperience() {
+    if (journeyStarted) return;
+    journeyStarted = true;
+
+    setJourneySwipeProgress(1);
+    journeySwipe?.classList.add("is-complete");
+
+    if (journeySwipeLabel) {
+        journeySwipeLabel.textContent = "Journey started";
+    }
+
+    setTimeout(() => journeyGate?.classList.add("is-leaving"), 220);
+
+    setTimeout(() => {
+        if (journeyGate) {
+            journeyGate.hidden = true;
+        }
+
+        // Release the cinematic intro only now.
+        document.body.classList.remove("journey-gate-active");
+        document.body.classList.add("journey-sequence-running");
+
+        beginCinematicSequence();
+        startCinematicStatusMessages();
+    }, 950);
+}
+
+function swipePosition(event) {
+    if (!journeySwipe) return 0;
+    const rect = journeySwipe.getBoundingClientRect();
+    return (event.clientX - rect.left - 27) /
+        Math.max(1, rect.width - 54);
+}
+
+journeySwipeHandle?.addEventListener("pointerdown", event => {
+    journeySwipeDragging = true;
+
+    journeySwipeHandle.setPointerCapture(event.pointerId);
+    journeySwipe?.classList.add("is-dragging");
+});
+
+journeySwipeHandle?.addEventListener("pointermove", event => {
+    if (journeySwipeDragging) {
+        setJourneySwipeProgress(swipePosition(event));
+    }
+});
+
+journeySwipeHandle?.addEventListener("pointerup", event => {
+    if (!journeySwipeDragging) return;
+
+    journeySwipeDragging = false;
+    journeySwipe?.classList.remove("is-dragging");
+
+    if (journeySwipeProgress >= .78) {
+        beginJourneyExperience();
+    } else {
+        setJourneySwipeProgress(0);
+    }
+
+    journeySwipeHandle.releasePointerCapture?.(event.pointerId);
+});
+
+journeySwipeHandle?.addEventListener("pointercancel", () => {
+    journeySwipeDragging = false;
+    journeySwipe?.classList.remove("is-dragging");
+
+
+    setJourneySwipeProgress(0);
+});
+
+journeySwipe?.addEventListener("keydown", event => {
+    if (event.key === "ArrowRight") {
+        event.preventDefault();
+        setJourneySwipeProgress(journeySwipeProgress + .12);
+    } else if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        setJourneySwipeProgress(journeySwipeProgress - .12);
+    } else if (
+        (event.key === "Enter" || event.key === " ") &&
+        journeySwipeProgress >= .5
+    ) {
+        event.preventDefault();
+        beginJourneyExperience();
+    }
+});
+
+window.addEventListener("load", () => {
+    setJourneySwipeProgress(0);
+}, { once: true });
+
+
 // FLUID CINEMATIC INTRO
 
 const cinematicOpening = document.getElementById("cinematicOpening");
@@ -18,7 +144,10 @@ function completeCinematicSequence() {
 
     cinematicOpening?.classList.add("is-closing");
 
-    document.body.classList.remove("cinematic-intro-active");
+    document.body.classList.remove(
+        "cinematic-intro-active",
+        "journey-sequence-running"
+    );
     document.body.classList.add("cinematic-intro-complete");
 
     cinematicCleanupTimer = window.setTimeout(() => {
@@ -53,11 +182,7 @@ cinematicSkip?.addEventListener(
     { once: true }
 );
 
-window.addEventListener(
-    "load",
-    beginCinematicSequence,
-    { once: true }
-);
+// Cinematic sequence begins after the opening swipe.
 
 
 // CINEMATIC AMBIENT STATUS
@@ -103,11 +228,7 @@ function startCinematicStatusMessages() {
     }, 2300);
 }
 
-window.addEventListener(
-    "load",
-    startCinematicStatusMessages,
-    { once: true }
-);
+// Ambient status begins after the opening swipe.
 
 cinematicSkip?.addEventListener("click", () => {
     clearInterval(cinematicStatusTimer);
@@ -117,7 +238,7 @@ cinematicSkip?.addEventListener("click", () => {
 // TRIP COUNTDOWN
 // Change this one value later if the confirmed departure date changes.
 const tripDepartureTime =
-    new Date("2026-11-09T09:00:00+05:30").getTime();
+    new Date("2026-11-15T09:00:00+05:30").getTime();
 
 const countdownDays = document.getElementById("countdownDays");
 const countdownHours = document.getElementById("countdownHours");
@@ -285,7 +406,7 @@ loginButton.addEventListener("click", () => {
         enteredCode === validPassenger.code
     ) {
         loginMessage.textContent =
-            "Passenger verified. Rio approves this journey. 🐾";
+            "Passenger verified. Rio approves this journey. 🐶";
 
         loginMessage.classList.add("login-success");
 
@@ -552,7 +673,6 @@ companionSelection.classList.remove("hidden");
 // =========================================================
 
 const PBA_COMPANION_NOTIFICATION_EMAIL = "mokshithvsharma@gmail.com";
-const PBA_BOARDING_PASS_EMAIL = "sharmavishwanadha@gmail.com";
 
 const PBA_EMAILJS = {
     serviceId: "service_jxaq2pp",
@@ -560,14 +680,16 @@ const PBA_EMAILJS = {
     publicKey: "PNUHbNDbC8Gvg7yqC"
 };
 
-const companionEmailStatus =
-    document.getElementById("companionEmailStatus");
+const companionEmailStatus = null;
 
 const boardingPassEmailStatus =
     document.getElementById("boardingPassEmailStatus");
+const boardingPassRecipientEmail =
+    document.getElementById("boardingPassRecipientEmail");
+const sendBoardingPassEmailButton =
+    document.getElementById("sendBoardingPassEmailButton");
 
 let companionNotificationSent = false;
-let boardingPassNotificationSent = false;
 
 function formatNotificationTimestamp() {
     return new Intl.DateTimeFormat("en-GB", {
@@ -592,19 +714,21 @@ function setEmailStatus(element, message, state = "") {
     }
 }
 
+// Public deployment base used by email clients.
+// Email apps cannot load localhost/file URLs, so email images must always
+// point to the live GitHub Pages assets.
+const PBA_PUBLIC_ASSET_BASE =
+    "https://mokshith-sharma-au13.github.io/PunjabiBaghAirways/";
+
 function safeAssetUrl(relativePath) {
     try {
-        const url = new URL(relativePath, window.location.href);
+        const cleanPath = String(relativePath || "")
+            .replace(/^\.\//, "")
+            .replace(/^\//, "");
 
-        if (
-            url.hostname === "localhost" ||
-            url.hostname === "127.0.0.1"
-        ) {
-            return "";
-        }
-
-        return url.href;
+        return new URL(cleanPath, PBA_PUBLIC_ASSET_BASE).href;
     } catch (error) {
+        console.warn("Unable to create public email asset URL:", error);
         return "";
     }
 }
@@ -727,7 +851,7 @@ function buildCompanionBookedHtml() {
          width="112"
          height="112"
          alt="Mokshith Sharma"
-         style="display:inline-block;width:112px;height:112px;object-fit:cover;
+         style="display:block;margin:0 auto;width:112px;height:112px;object-fit:cover;
                 border-radius:56px;border:4px solid #ffffff;
                 box-shadow:0 10px 25px rgba(0,0,0,.15);">
     ` : `
@@ -846,7 +970,7 @@ function buildBoardingPassHtml() {
          width="96"
          height="96"
          alt="Tanya Arora"
-         style="display:block;width:96px;height:96px;object-fit:cover;
+         style="display:block;margin-left:auto;width:96px;height:96px;object-fit:cover;
                 border-radius:48px;border:4px solid #ffffff;
                 box-shadow:0 8px 20px rgba(0,0,0,.13);">
     ` : `
@@ -987,7 +1111,7 @@ function buildBoardingPassHtml() {
 
     Estimated departure:
     <strong style="color:#151d27;">
-        09 November 2026, 9:00 AM IST
+        15 November 2026, 9:00 AM IST
     </strong>
 
     <br><br>
@@ -1075,8 +1199,22 @@ async function sendCompanionBookedEmail() {
     }
 }
 
-async function sendBoardingPassEmail() {
-    if (boardingPassNotificationSent) return;
+async function sendBoardingPassEmail(toEmail) {
+    const recipient = String(toEmail || "").trim();
+
+    if (!recipient || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(recipient)) {
+        setEmailStatus(
+            boardingPassEmailStatus,
+            "Please enter a valid email address.",
+            "error"
+        );
+        boardingPassRecipientEmail?.focus();
+        return;
+    }
+
+    if (sendBoardingPassEmailButton) {
+        sendBoardingPassEmailButton.disabled = true;
+    }
 
     setEmailStatus(
         boardingPassEmailStatus,
@@ -1086,33 +1224,36 @@ async function sendBoardingPassEmail() {
 
     try {
         await sendViaEmailJs(
-            PBA_BOARDING_PASS_EMAIL,
+            recipient,
             "PBA Boarding Pass ✈️ Tanya Arora — London & Japan",
             buildBoardingPassHtml()
         );
 
-        boardingPassNotificationSent = true;
-
         setEmailStatus(
             boardingPassEmailStatus,
-            "Premium boarding pass sent ✓",
+            `Boarding pass sent to ${recipient} ✓`,
             "success"
         );
 
-    } catch (error) {
+        if (sendBoardingPassEmailButton) {
+            sendBoardingPassEmailButton.textContent = "Sent ✓";
+        }
 
-        console.error(
-            "Boarding pass email failed:",
-            error
-        );
+    } catch (error) {
+        console.error("Boarding pass email failed:", error);
 
         setEmailStatus(
             boardingPassEmailStatus,
-            "Travel clearance confirmed. Boarding-pass email could not be delivered.",
+            "Boarding-pass email could not be delivered. Please try again.",
             "error"
         );
+
+        if (sendBoardingPassEmailButton) {
+            sendBoardingPassEmailButton.disabled = false;
+        }
     }
 }
+
 
 
 // COMPANION SELECTION
@@ -1203,30 +1344,34 @@ bookMokshithButton?.addEventListener("click", () => {
     document.querySelector('[data-companion="mokshith"]')
         ?.classList.add("companion-booked");
 
-    // Send the companion booking notification without blocking the UI flow.
-    sendCompanionBookedEmail();
+    // Notify Mokshith automatically, without interrupting Tanya's flow.
+    void sendCompanionBookedEmail();
+
+    fadeOut(companionSelection);
 
     setTimeout(() => {
-        fadeOut(companionSelection);
-
-        setTimeout(() => {
-            companionSelection.style.display = "none";
-            agreement.classList.remove("hidden");
-        }, 800);
-    }, 1000);
+        companionSelection.style.display = "none";
+        agreement.classList.remove("hidden");
+    }, 800);
 });
 
 
+
+sendBoardingPassEmailButton?.addEventListener("click", () => {
+    sendBoardingPassEmail(boardingPassRecipientEmail?.value);
+});
+
+boardingPassRecipientEmail?.addEventListener("keydown", event => {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        sendBoardingPassEmail(boardingPassRecipientEmail.value);
+    }
+});
 
 // ACCEPT
 
 
 acceptButton.addEventListener("click",()=>{
-
-// Send the boarding pass as soon as travel clearance is confirmed.
-// The page transition continues even if the email service is unavailable.
-sendBoardingPassEmail();
-
 
 fadeOut(agreement);
 
@@ -1283,6 +1428,16 @@ loader.style.display="none";
 
 ticket.classList.remove("hidden");
 
+// Lock only the finished travel portal to its initial boarding-pass height.
+// The centred "Generating Boarding Pass" loader is intentionally untouched.
+window.requestAnimationFrame(() => {
+    const portalHeight = ticket.scrollHeight;
+
+    if (portalHeight > 0) {
+        ticket.style.setProperty("--portal-locked-height", `${portalHeight}px`);
+        ticket.classList.add("portal-height-locked");
+    }
+});
 
 
 setTimeout(()=>{
@@ -1290,8 +1445,14 @@ setTimeout(()=>{
 
 stamp.classList.remove("hidden");
 
+countdownStatus?.classList.add("stamp-status-pulse");
 
-},1200);
+window.setTimeout(() => {
+    countdownStatus?.classList.remove("stamp-status-pulse");
+}, 720);
+
+
+},1650);
 
 
 
@@ -1317,6 +1478,111 @@ element.classList.add("fade-out");
 
 document.querySelectorAll(".lock-wheel").forEach((_, index) => {
     renderLockWheel(index);
+});
+
+
+// GALLERY
+const galleryInput = document.getElementById("galleryInput");
+const galleryUploadButton = document.getElementById("galleryUploadButton");
+const galleryGrid = document.getElementById("galleryGrid");
+const galleryEmptyMessage = document.getElementById("galleryEmptyMessage");
+
+galleryUploadButton?.addEventListener("click", () => {
+    galleryInput?.click();
+});
+
+galleryInput?.addEventListener("change", () => {
+    const files = Array.from(galleryInput.files || []);
+
+    files.forEach(file => {
+        if (!file.type.startsWith("image/")) return;
+
+        const reader = new FileReader();
+
+        reader.addEventListener("load", () => {
+            const figure = document.createElement("figure");
+            figure.className = "gallery-item";
+
+            const image = document.createElement("img");
+            image.src = reader.result;
+            image.alt = file.name || "Travel memory";
+
+            const caption = document.createElement("figcaption");
+            caption.textContent = file.name || "Travel memory";
+
+            figure.append(image, caption);
+            galleryGrid?.prepend(figure);
+
+            if (galleryEmptyMessage) {
+                galleryEmptyMessage.hidden = true;
+            }
+        });
+
+        reader.readAsDataURL(file);
+    });
+
+    galleryInput.value = "";
+});
+
+
+// JOURNAL
+const journalInput = document.getElementById("journalInput");
+const journalAddButton = document.getElementById("journalAddButton");
+const journalList = document.getElementById("journalList");
+const journalEmptyMessage = document.getElementById("journalEmptyMessage");
+
+function createJournalNote(text) {
+    const article = document.createElement("article");
+    article.className = "journal-note";
+
+    const header = document.createElement("div");
+    header.className = "journal-note-header";
+
+    const title = document.createElement("strong");
+    title.textContent = "Travel Note";
+
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.className = "journal-remove-button";
+    remove.textContent = "Remove";
+    remove.addEventListener("click", () => {
+        article.remove();
+
+        if (
+            journalList &&
+            !journalList.querySelector(".journal-note") &&
+            journalEmptyMessage
+        ) {
+            journalEmptyMessage.hidden = false;
+        }
+    });
+
+    const content = document.createElement("p");
+    content.textContent = text;
+
+    header.append(title, remove);
+    article.append(header, content);
+
+    return article;
+}
+
+journalAddButton?.addEventListener("click", () => {
+    const text = journalInput?.value.trim();
+
+    if (!text || !journalList) return;
+
+    journalList.prepend(createJournalNote(text));
+    journalInput.value = "";
+
+    if (journalEmptyMessage) {
+        journalEmptyMessage.hidden = true;
+    }
+});
+
+journalInput?.addEventListener("keydown", event => {
+    if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+        journalAddButton?.click();
+    }
 });
 
 
