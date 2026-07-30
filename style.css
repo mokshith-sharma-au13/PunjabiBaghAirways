@@ -3923,3 +3923,41 @@ body.journey-sequence-running .cinematic-skip {
         -webkit-backface-visibility: hidden;
     }
 }
+
+
+/* EUROPE BACKUP ITINERARY */
+.europe-route {
+    flex-wrap: wrap;
+    gap: 12px 16px;
+    font-size: 18px;
+}
+
+.europe-route span:not(.arrow) {
+    white-space: nowrap;
+}
+
+.destination-selector {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (min-width: 900px) {
+    .boarding-card {
+        max-width: 820px;
+    }
+}
+
+@media (max-width: 600px) {
+    .europe-route {
+        gap: 9px;
+        font-size: 15px;
+    }
+
+    .journey-item {
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .journey-title {
+        min-width: 92px;
+    }
+}

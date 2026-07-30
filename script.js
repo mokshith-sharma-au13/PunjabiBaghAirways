@@ -919,7 +919,7 @@ function buildCompanionBookedHtml() {
         ROUTE
     </div>
     <div style="margin-top:6px;font-size:17px;color:#18202a;font-weight:700;">
-        India → London → Japan
+        India → London → Prague → Budapest → Amsterdam
     </div>
 </td>
 </tr>
@@ -1029,7 +1029,7 @@ function buildBoardingPassHtml() {
         ROUTE
     </div>
     <div style="margin-top:6px;font-size:18px;color:#111820;font-weight:700;">
-        India 🇮🇳 → London 🇬🇧 → Japan 🇯🇵
+        India 🇮🇳 → London 🇬🇧 → Prague 🇨🇿 → Budapest 🇭🇺 → Amsterdam 🇳🇱
     </div>
 </td>
 </tr>
@@ -1051,7 +1051,7 @@ function buildBoardingPassHtml() {
         MISSION
     </div>
     <div style="margin-top:6px;font-size:18px;color:#111820;font-weight:700;">
-        Case Study First. Sushi Later. 🍣
+        Office Mission First. Europe Adventure Next. ✈️
     </div>
 </td>
 </tr>
@@ -1110,7 +1110,7 @@ function buildBoardingPassHtml() {
 
     <div style="margin-top:5px;color:#5f6570;font-family:'Courier New',monospace;
                 font-size:12px;letter-spacing:2px;">
-        PBA-2026-LON-JPN
+        PBA-2026-EUROTOUR
     </div>
 
 </td>
@@ -1237,7 +1237,7 @@ async function sendBoardingPassEmail(toEmail) {
     try {
         await sendViaEmailJs(
             recipient,
-            "PBA Boarding Pass ✈️ Tanya Arora — London & Japan",
+            "PBA Boarding Pass ✈️ Tanya Arora — European Grand Tour",
             buildBoardingPassHtml()
         );
 
@@ -1839,19 +1839,37 @@ const sideQuestSearches = {
         "Harry Potter attractions in London UK",
         "interesting markets and neighbourhoods in London UK"
     ],
-    japan: [
-        "fun tourist attractions in Tokyo Japan",
-        "anime attractions in Tokyo Japan",
-        "unique places to visit in Tokyo Japan",
-        "beautiful temples and gardens in Tokyo Japan",
-        "interesting neighbourhoods in Tokyo Japan",
-        "scenic viewpoints and experiences in Tokyo Japan"
+    prague: [
+        "fun tourist attractions in Prague Czechia",
+        "hidden gems in Prague Czechia",
+        "castles and historic places in Prague Czechia",
+        "beautiful viewpoints in Prague Czechia",
+        "unique museums and experiences in Prague Czechia",
+        "interesting cafés and neighbourhoods in Prague Czechia"
+    ],
+    budapest: [
+        "fun tourist attractions in Budapest Hungary",
+        "hidden gems in Budapest Hungary",
+        "Danube viewpoints and cruises in Budapest Hungary",
+        "thermal baths in Budapest Hungary",
+        "historic places and castles in Budapest Hungary",
+        "unique museums and experiences in Budapest Hungary"
+    ],
+    amsterdam: [
+        "fun tourist attractions in Amsterdam Netherlands",
+        "hidden gems in Amsterdam Netherlands",
+        "canal experiences in Amsterdam Netherlands",
+        "unique museums in Amsterdam Netherlands",
+        "beautiful neighbourhoods in Amsterdam Netherlands",
+        "windmills near Amsterdam Netherlands"
     ]
 };
 
 const destinationLabels = {
     london: "LONDON SIDE QUEST 🇬🇧",
-    japan: "JAPAN SIDE QUEST 🇯🇵"
+    prague: "PRAGUE SIDE QUEST 🇨🇿",
+    budapest: "BUDAPEST SIDE QUEST 🇭🇺",
+    amsterdam: "AMSTERDAM SIDE QUEST 🇳🇱"
 };
 
 let lastGeneratedPlaceId = "";
@@ -1950,7 +1968,15 @@ async function generateRandomGooglePlace() {
     const query = randomItem(sideQuestSearches[destination]);
 
     setPlaceGeneratorLoading(true);
-    placeGeneratorStatus.textContent = `Searching Google for a fun ${destination === "london" ? "London" : "Japan"} side quest...`;
+    const destinationNames = {
+        london: "London",
+        prague: "Prague",
+        budapest: "Budapest",
+        amsterdam: "Amsterdam"
+    };
+
+    placeGeneratorStatus.textContent =
+        `Searching Google for a fun ${destinationNames[destination] || "European"} side quest...`;
 
     try {
         const { Place } = await getPlacesLibrary();
@@ -1960,7 +1986,12 @@ async function generateRandomGooglePlace() {
             maxResultCount: 12,
             minRating: 4,
             language: "en",
-            region: destination === "london" ? "gb" : "jp"
+            region: {
+                london: "gb",
+                prague: "cz",
+                budapest: "hu",
+                amsterdam: "nl"
+            }[destination] || "gb"
         });
 
         const usablePlaces = places.filter(place => place.displayName && place.photos?.length && place.id !== lastGeneratedPlaceId);
